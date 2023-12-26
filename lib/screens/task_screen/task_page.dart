@@ -1,13 +1,15 @@
-import 'package:choice/choice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
+import 'package:task_list/domain/api/local_task_comment_repositoryt.dart';
 import 'package:task_list/domain/models/comments_model.dart';
 import 'package:task_list/domain/models/task_model.dart';
 import 'package:task_list/screens/task_screen/widgets/alert_dialog.dart';
 import 'package:task_list/screens/task_screen/widgets/comments_show.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:task_list/screens/task_screen/widgets/just_text.dart';
+import 'package:task_list/screens/task_screen/widgets/status_choise.dart';
 
 class TaskPage extends StatefulWidget {
   final Task task;
@@ -18,24 +20,17 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
+  late final LocalCommentRepository commentRepository;
   late final box = Hive.box<Comment>('commentBox');
 
   @override
   void initState() {
     super.initState();
+    commentRepository = LocalCommentRepository(task: widget.task);
     box.watch().listen((event) {
       if (mounted) {
         setState(() {});
       }
-    });
-  }
-
-  String? singleSelected;
-
-  void setSingleSelected(String? value) {
-    setState(() {
-      singleSelected = value;
-      widget.task.status = int.parse(value!);
     });
   }
 
@@ -44,61 +39,46 @@ class _TaskPageState extends State<TaskPage> {
     return Scaffold(
         appBar: AppBar(leading: const BackButton()),
         body: SingleChildScrollView(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Name: ${widget.task.title}'),
-            Text('Descriptions: ${widget.task.descriptions}', maxLines: 6),
-            myChoise(),
-            Text('Hour :${widget.task.hours}'),
-            Row(
-              children: [
-                const Expanded(child: Text('Comments')),
-                TextButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return BlocProvider(
-                              create: (context) => EditTaskBloc(),
-                              child: MyAlertDialogForAddingComment(
-                                  task: widget.task),
-                            );
-                          });
-                    },
-                    child: Text(AppLocalizations.of(context)!.addComment))
-              ],
-            ),
-            const Divider(),
-            CommentsListView(task: widget.task, boxComments: box),
-          ]),
+          child: bodyMain(context),
         ));
   }
 
-  Widget myChoise() {
-    List<String> choices = ['1', '2', '3', '4', '5'];
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: PromptedChoice<String>.single(
-        title: 'Status',
-        value: widget.task.status.toString(),
-        onChanged: setSingleSelected,
-        itemCount: choices.length,
-        itemBuilder: (state, i) {
-          return RadioListTile(
-            value: choices[i],
-            groupValue: state.single,
-            onChanged: (value) {
-              state.select(choices[i]);
-            },
-            title: ChoiceText(
-              choices[i],
-              highlight: state.search?.value,
-            ),
-          );
-        },
-        promptDelegate: ChoicePrompt.delegateBottomSheet(),
-        anchorBuilder: ChoiceAnchor.create(inline: true),
+  Column bodyMain(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      JustText(stringType: 'Name', stringSpec: widget.task.title),
+      JustText(
+          stringType: 'Descriptions', stringSpec: widget.task.descriptions),
+      BlocProvider(
+        create: (context) => EditTaskBloc(),
+        child: StatusChoise(task: widget.task),
       ),
+      JustText(stringType: 'Hour', stringSpec: widget.task.hours.toString()),
+      commentsRow(context),
+      const Divider(),
+      CommentsListView(
+          commentRepository: commentRepository,
+          task: widget.task,
+          boxComments: box),
+    ]);
+  }
+
+  Row commentsRow(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(child: JustText(stringType: 'Comments', stringSpec: '')),
+        TextButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return BlocProvider(
+                      create: (context) => EditTaskBloc(),
+                      child: MyAlertDialogForAddingComment(task: widget.task),
+                    );
+                  });
+            },
+            child: Text(AppLocalizations.of(context)!.addComment))
+      ],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
 import 'package:task_list/domain/models/task_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyAlertDialogForAddingComment extends StatefulWidget {
   final Task task;
@@ -32,12 +33,12 @@ class _MyAlertDialogForAddingCommentState
                   Navigator.pop(context);
                   textEditingController.clear();
                 },
-                child: const Text('ADD')),
+                child: Text(AppLocalizations.of(context)!.addButton)),
             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('BACK'))
+                child: Text(AppLocalizations.of(context)!.cancelButton))
           ],
         );
       },

@@ -6,7 +6,12 @@ class AppTextStyles {
 
   static const TextStyle titleStyle = TextStyle(
     color: Colors.black,
-    fontSize: 26,
+    fontSize: 24,
+  );
+
+  static const TextStyle h2 = TextStyle(
+    color: Colors.black,
+    fontSize: 22,
   );
 
   static const TextStyle subtitleStyle = TextStyle(

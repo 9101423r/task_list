@@ -8,7 +8,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(8),
         ),
         margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-        color: const Color.fromARGB(255, 165, 222, 248),
+        color: const Color.fromARGB(255, 232, 244, 250),
         elevation: 0.0,
       ),
       listTileTheme: const ListTileThemeData(
@@ -18,10 +18,11 @@ class AppTheme {
       scaffoldBackgroundColor: Colors.white,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
+          minimumSize: const Size(150, 50),
           textStyle: AppTextStyles.loginButtonText,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          backgroundColor: const Color.fromARGB(255, 46, 130, 234),
-          foregroundColor: const Color.fromARGB(255, 165, 222, 248),
+          backgroundColor: const Color.fromARGB(255, 222, 236, 253),
+          foregroundColor: const Color.fromARGB(255, 0, 0, 0),
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
         ),
       ));

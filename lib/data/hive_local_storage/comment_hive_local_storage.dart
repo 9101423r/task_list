@@ -9,7 +9,11 @@ class CommentHiveLocalStorage {
 
   void addComment(Task task, String string) async {
     String id = DateTime.now().toString();
-    await box.put(id, Comment(id: id, descriptions: string));
     TaskHiveLocalStorage().saveCommentId(task, id);
+    await box.put(id, Comment(id: id, descriptions: string));
+  }
+
+  Box<Comment> refreshBox() {
+    return box;
   }
 }

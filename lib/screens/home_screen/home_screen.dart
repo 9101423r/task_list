@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+
 import 'package:provider/provider.dart';
 
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
+import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
+import 'package:task_list/domain/api/local_task_repository.dart';
 import 'package:task_list/domain/models/task_model.dart';
+
 import 'package:task_list/domain/provider/locale_provider.dart';
 import 'package:task_list/screens/home_screen/widgets/alert_dialog.dart';
 import 'package:task_list/screens/home_screen/widgets/task_card.dart';
@@ -18,19 +22,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final box = Hive.box<Task>('taskBox');
-
-  @override
-  void initState() {
-    super.initState();
-    box.watch().listen((event) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-    box.clear();
-  }
-
   Future<void> _refresh() async {
     await Future.delayed(const Duration(seconds: 3));
     setState(() {});
@@ -45,9 +36,23 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Text('TaskList'), actions: [popUpMenuAppBar()]),
           body: RefreshIndicator(
             onRefresh: _refresh,
-            child: ListView(
-              children: box.values.map((task) => TaskCard(task: task)).toList(),
-            ),
+            child: StreamBuilder<List<Task>>(
+                stream: TaskRepository().tasksStream,
+                builder: (context, snapshot) {
+                  print(snapshot.connectionState);
+                  if (snapshot.data == null) {
+                    print(snapshot.data);
+                    print('its snapshot.dart == null');
+                    return const Center(child: Text('No task, No List<Task>'));
+                  } else {
+                    print(snapshot.data);
+                    List<Task> listTask = snapshot.data!;
+                    return ListView(
+                      children:
+                          listTask.map((task) => TaskCard(task: task)).toList(),
+                    );
+                  }
+                }),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
@@ -77,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 value: 'deleteAll',
                 onTap: () {
                   setState(() {
-                    box.clear();
+                    TaskHiveLocalStorage().box.clear();
                   });
                 },
                 child: Text(AppLocalizations.of(context)!.clearBox),

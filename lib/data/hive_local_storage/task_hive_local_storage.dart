@@ -10,12 +10,12 @@ class TaskHiveLocalStorage {
   }
 
   void saveCommentId(Task task, String id) async {
-    Task newTask = task;
-    newTask.comments.add(id);
-    box.put(task.temporaryUUID, newTask);
+    box.get(task.temporaryUUID)!.comments.add(id);
   }
 
-  getValues() {
-    return box.values.toList();
+  void changeStatus(Task task, String status) {
+    Task newTask = task;
+    newTask.status = int.parse(status);
+    box.put(task.temporaryUUID, newTask);
   }
 }

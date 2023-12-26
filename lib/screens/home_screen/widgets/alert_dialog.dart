@@ -23,37 +23,43 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
       builder: (context, state) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.4,
-          width: MediaQuery.of(context).size.width * 0.75,
-          child: AlertDialog(
-            content: Column(children: [
-              TextField(controller: taskTitleController, autofocus: true),
+        return AlertDialog(
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.22,
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: Column(children: [
               TextField(
-                controller: taskDescriptionController,
-              )
+                  controller: taskTitleController,
+                  autofocus: true,
+                  decoration: const InputDecoration(hintText: 'Task title')),
+              TextField(
+                  controller: taskDescriptionController,
+                  maxLines: 2,
+                  decoration:
+                      const InputDecoration(hintText: 'Task description'))
             ]),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      String title = taskTitleController.text;
-                      String taskDescription = taskDescriptionController.text;
-                      context.read<OperationForTaskBloc>().add(
-                          OperationForTaskPressedOK(title, taskDescription));
-                    });
-                    Navigator.pop(context);
-                    clearController();
-                  },
-                  child: Text(AppLocalizations.of(context)!.addButton)),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    clearController();
-                  },
-                  child: Text(AppLocalizations.of(context)!.cancelButton))
-            ],
           ),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    String title = taskTitleController.text;
+                    String taskDescription = taskDescriptionController.text;
+                    context
+                        .read<OperationForTaskBloc>()
+                        .add(OperationForTaskPressedOK(title, taskDescription));
+                  });
+                  Navigator.pop(context);
+                  clearController();
+                },
+                child: Text(AppLocalizations.of(context)!.addButton)),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  clearController();
+                },
+                child: Text(AppLocalizations.of(context)!.cancelButton))
+          ],
         );
       },
     );

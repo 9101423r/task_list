@@ -18,14 +18,11 @@ class TaskCard extends StatelessWidget {
         },
         child: ListTile(
           title: Text(task.title.toString()),
-          subtitle: Row(children: [
-            Flexible(child: Text(task.descriptions.toString())),
-            Text(
-              '- Status :${task.hours.toString()}',
-              style: const TextStyle(color: Colors.green),
-            )
-          ]),
-          trailing: Text(task.status.toString()),
+          subtitle: Text(task.descriptions.toString()),
+          trailing: Text(
+            'Status:${task.status.toString()}',
+            style: const TextStyle(color: Colors.green),
+          ),
         ),
       ),
     );

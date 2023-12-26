@@ -24,3 +24,9 @@ class TappedAddComment extends EditTaskEvent {
   final String commentText;
   const TappedAddComment({required this.task, required this.commentText});
 }
+
+class ChangeStatus extends EditTaskEvent {
+  final Task task;
+  final String status;
+  ChangeStatus({required this.task, required this.status});
+}
