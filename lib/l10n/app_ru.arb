@@ -1,0 +1,18 @@
+{
+  "loginCompanyName": "Названий компании",
+  "loginEmpty": "Пожалуйста заполните это поле",
+  "@loginEmpty":{
+      "description": "Отображается в валидаторе, если текстовое поле пустоy"
+  },
+  "loginEmailValidator": "Пожалуйста, введите действительный адрес электронной почты",
+  "loginPasswordValidator": "Пожалуйста введите правильный пароль",
+  "loginButton":"Войти",
+  "addButton" :"Добавить",
+  "cancelButton": "Назад",
+  "addComment": "Добавить комментарий",
+  "clearBox": "Удалить все",
+  "changeLocale": "Изменить язык",
+  "changeTheme": "Изменить тему",
+  "status": "Статус"
+
+}

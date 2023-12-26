@@ -1,0 +1,17 @@
+{
+  "loginCompanyName": "Company name",
+  "loginEmpty": "Please fill in this field",
+  "@loginEmpty":{
+      "description": "Showing in validator if textfield empty"
+  },
+  "loginEmailValidator": "Please enter a valid email",
+  "loginPasswordValidator": "Please enter a valid password",
+  "loginButton":"LOGIN",
+  "addButton" :"ADD",
+  "cancelButton": "BACK",
+  "addComment": "Add comments",
+  "clearBox": "Clear all",
+  "changeLocale": "Change Locale",
+  "changeTheme": "Change Theme",
+  "status": "Status"
+}

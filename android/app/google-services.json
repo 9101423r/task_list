@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "76177343192",
+    "project_id": "my-task-list-block-firebase",
+    "storage_bucket": "my-task-list-block-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:76177343192:android:7e0237b9d3619b31c08dad",
+        "android_client_info": {
+          "package_name": "com.example.task_list"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSms8_ewtC7WsFK9jSbwTe_A7eeo_Pfus"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
