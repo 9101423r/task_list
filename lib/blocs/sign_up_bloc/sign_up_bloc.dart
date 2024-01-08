@@ -10,15 +10,17 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
   SignUpBloc({required UserRepository userRepository})
       : _userRepository = userRepository,
-        super(SignUpInitial()) {
+        super(const SignUpInitial(signIsSuccses: false)) {
     on<SignUpRequired>((event, emit) async {
-      emit(SignUpProcess());
+      emit(const SignUpProcess(signIsSuccses: false));
       try {
+        Future.delayed(const Duration(seconds: 5));
+        const Duration(seconds: 5);
         MyUser user = await _userRepository.signUp(event.user, event.password);
         await _userRepository.setUserData(user);
-        emit(SignUpSuccess());
+        emit(const SignUpSuccess(signIsSuccses: true));
       } catch (e) {
-        emit(SignUpFailure());
+        emit(const SignUpFailure(signIsSuccses: false));
       }
       // TODO: implement event handler
     });

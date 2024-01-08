@@ -24,7 +24,7 @@ class TaskLoaded extends OperationForTaskState {
 class TaskError extends OperationForTaskState {
   final String message;
 
-  TaskError({required this.message});
+  const TaskError({required this.message});
 }
 
 class OpenTask extends OperationForTaskState {}

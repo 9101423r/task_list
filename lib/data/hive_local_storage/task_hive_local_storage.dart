@@ -18,4 +18,7 @@ class TaskHiveLocalStorage {
     newTask.status = int.parse(status);
     box.put(task.temporaryUUID, newTask);
   }
+  void clearBox() async{
+    await box.clear();
+      }
 }

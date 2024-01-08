@@ -25,26 +25,14 @@ class _LoginFormState extends State<LoginForm> {
   final formKey = GlobalKey<FormState>();
   IconData iconOpenPassword = Icons.lock_open;
   bool obscurePassword = true;
-  bool signUpRequired = false;
+  
   String? _errorMsg;
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SignUpBloc, SignUpState>(
-      listener: (context, state) {
-        if (state is SignUpProcess) {
-          setState(() {
-            signUpRequired = false;
-          });
-        } else if (state is SignUpProcess) {
-          setState(() {
-            signUpRequired = true;
-          });
-        } else if (state is SignUpFailure) {
-          return;
-        }
-      },
-      child: Form(
+    return BlocBuilder<SignUpBloc, SignUpState>(
+      builder: (context, state) {
+        return Form(
         key: formKey,
         child: Column(
           children: [
@@ -56,41 +44,42 @@ class _LoginFormState extends State<LoginForm> {
             emailTextField(context),
             const SizedBox(height: 20),
             passwordTextField(context),
-            !signUpRequired
-                ? loginTextButton(context)
-                : const CircularProgressIndicator()
+            loginButton(context, state)
+              
           ],
         ),
-      ),
-    );
+      );
+    
+      },
+      );
   }
 
-  SizedBox loginTextButton(BuildContext context) {
+  SizedBox loginButton(BuildContext context, SignUpState state) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.5,
-      child: TextButton(
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              MyUser myUser = MyUser.empty;
-              myUser = myUser.copyWith(
-                  userId: DateTime.now().toString(),
-                  companyName: companyNameController.text,
-                  email: emailController.text,
-                  phoneNumber: phoneNumberController.text);
-              setState(() {
-                context
-                    .read<SignUpBloc>()
-                    .add(SignUpRequired(myUser, passwordController.text));
-              });
-            }
-            print(
-                'We must to going try register if server response good go HomePage,else show SnackBar with error ');
-          },
-          child: Text(
-            AppLocalizations.of(context)!.loginButton,
-            style: AppTextStyles.loginButtonText,
-          )),
-    );
+    width: MediaQuery.of(context).size.width * 0.5,
+    child: TextButton(
+        onPressed: () {
+          if (formKey.currentState!.validate()) {
+            MyUser myUser = MyUser.empty;
+            myUser = myUser.copyWith(
+                userId: DateTime.now().toString(),
+                companyName: companyNameController.text,
+                email: emailController.text,
+                phoneNumber: phoneNumberController.text);
+            setState(() {
+              context
+                  .read<SignUpBloc>()
+                  .add(SignUpRequired(myUser, passwordController.text));
+            });
+          }
+          print(
+              'We must to going try register if server response good go HomePage,else show SnackBar with error ');
+        },
+        child:  state is SignUpProcess ? const CircularProgressIndicator() : Text(
+          AppLocalizations.of(context)!.loginButton,
+          style: AppTextStyles.loginButtonText,
+        ) ,
+  ));
   }
 
   MyTextField passwordTextField(BuildContext context) {

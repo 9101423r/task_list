@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
+import 'package:task_list/domain/api/local_task_repository.dart';
 import 'package:task_list/domain/models/task_model.dart';
 import 'package:task_list/screens/task_screen/task_page.dart';
 
@@ -41,5 +42,28 @@ class OperationForTaskBloc
                   )));
       emit(OpenTask());
     });
+
+    on<ClearBoxTapped>((event, emit){
+      TaskRepository().clearBox();
+    });
+
+
+    on<PageRefreshed>((event, emit)  async{
+      try{
+        if(true){ // if datas come here some logic  TODO
+
+        } 
+        // ignore: dead_code
+        else{ // else 
+
+        } 
+      }
+      catch(error){
+        print('PageRefreshed error: $error');
+
+      }
+    });
   }
+
+
 }

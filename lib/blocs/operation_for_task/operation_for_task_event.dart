@@ -29,3 +29,11 @@ class TaskTapped extends OperationForTaskEvent {
   final Task task;
   const TaskTapped({required this.context, required this.task});
 }
+
+class ClearBoxTapped extends OperationForTaskEvent{
+  
+}
+
+class PageRefreshed extends OperationForTaskEvent{
+  
+}

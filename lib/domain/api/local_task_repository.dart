@@ -24,6 +24,10 @@ class TaskRepository {
     });
   }
 
+  void clearBox(){
+    TaskHiveLocalStorage().clearBox();
+  }
+
   void dispose() {
     _tasksController.close();
   }
