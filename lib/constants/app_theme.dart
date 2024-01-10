@@ -25,5 +25,10 @@ class AppTheme {
           foregroundColor: const Color.fromARGB(255, 0, 0, 0),
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
         ),
-      ));
+      ),
+      dropdownMenuTheme: const DropdownMenuThemeData(
+        textStyle: AppTextStyles.subtitleStyle
+      ),
+      
+      );
 }

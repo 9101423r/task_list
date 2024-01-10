@@ -1,16 +1,26 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:task_list/domain/models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task_model.dart';
+
 
 class TaskHiveLocalStorage {
   String boxName = 'taskBox';
   late final box = Hive.box<Task>(boxName);
 
-  void addTask(Task task) async {
+  Future<void> addTask(Task task) async {
+    await box.put(task.id, task);
+  }
+
+  Future<void> addTaskWithUUID(Task task) async{
     await box.put(task.temporaryUUID, task);
   }
 
   void saveCommentId(Task task, String id) async {
-    box.get(task.temporaryUUID)!.comments.add(id);
+    if(task.temporaryUUID == 'null'){
+      box.get(task.id)!.comments.add(id);
+    }else{
+        box.get(task.temporaryUUID)!.comments.add(id);
+    }
+ 
   }
 
   void changeStatus(Task task, String status) {
@@ -20,5 +30,5 @@ class TaskHiveLocalStorage {
   }
   void clearBox() async{
     await box.clear();
-      }
+    }
 }

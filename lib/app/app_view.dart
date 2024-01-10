@@ -28,7 +28,7 @@ class _MyAppViewState extends State<MyAppView> {
         title: 'TaskList',
         debugShowCheckedModeBanner: false,
         localizationsDelegates: const [
-          AppLocalizations.delegate, // Add this line
+          AppLocalizations.delegate, 
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
@@ -45,14 +45,23 @@ class _MyAppViewState extends State<MyAppView> {
             );
           } else if (state.status == AuthenticationStatus.unauthenticated) {
             return const LoginScreen();
-          } else {
-            return const Center(
-                child: Column(
-              children: [
-                Text('Here must to be экран загрузки'),
-                CircularProgressIndicator()
-              ],
-            ));
+          } else if(state.status == AuthenticationStatus.unknown) {
+            return const Scaffold(
+              body: Center(
+                  child: Column(
+                children: [
+                  Text('Here must to be экран загрузки'),
+                  CircularProgressIndicator()
+                ],
+              )),
+            
+            )
+            ;
+          }
+          else{
+            return Scaffold(
+              body:Container(color: Colors.purple)
+            );
           }
         }));
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
-import 'package:task_list/domain/models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task_model.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyAlertDialogForAddingComment extends StatefulWidget {

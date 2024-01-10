@@ -11,3 +11,5 @@ class AuthenticationUserChanged extends AuthnticationEvent {
   final User? user;
   const AuthenticationUserChanged(this.user);
 }
+
+

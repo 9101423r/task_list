@@ -4,13 +4,35 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+0. Пререквизиты. (Версия флаттера, дарта, градла и .т.п)
+    Flutter: 3.16.5
+    Dart SDK version: 3.2.3 (stable)
+1. Краткое описание проекта (+ информация о архитектуре)
+    Приложение для отслежавание задач для разных представителей компании. Приложение работатет на локольном хранилище, пока что не синхронизированы с серверной части. Было написано используя BloC (блочную) архитектуру.
+2. Поддерживаемые Платформы
+    Web
+    Android
+3. Список зависимостей (импортируемые пакеты и т.п.)
+    cupertino_icons: ^1.0.2
+    uuid: ^4.2.2
+    flutter_bloc: ^8.1.3
+    firebase_core: ^2.24.2
+    firebase_auth: ^4.15.3
+    bloc: ^8.1.2
+    flutter_multi_formatter: ^2.12.3
+    equatable: ^2.0.5 
+    choice: ^2.3.0 Пакет для смены статуса
+    provider: ^6.1.1 
+    user_repository: Пакет для авторизации пользователя в серверной части
+        path: packages/user_repository
+    hive_flutter: ^1.1.0
+    flutter_localizations:  Пакет для локализации
+        sdk: flutter 
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4. Инструкция по развертыванию (если необходимо) и настройке 
+    Нету
+5. Список фич с отметками что сделано а что ещё нет.
+    1. Все работает в локальной хранилище
+    2. Надо связывать с серверной части 
+6. Прочее (Здесь могу быть всякие комментарии, например о том что есть какой либо нюанс функционала и т.п.)
+    

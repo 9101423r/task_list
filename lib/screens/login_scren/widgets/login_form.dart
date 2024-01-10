@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:task_list/constants/app_text_styles.dart';
+import 'package:task_list/constants/validator.dart';
+import 'package:task_list/domain/api/list_compain.dart';
+import 'package:task_list/screens/login_scren/widgets/company_name_drop_down.dart';
 import 'package:task_list/screens/login_scren/widgets/my_text_field.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_multi_formatter/flutter_multi_formatter.dart'
-    as formatter;
+
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -39,6 +42,13 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 20),
             companyNameTextField(context),
             const SizedBox(height: 20),
+            const Row(
+              children: [
+                Text('Выберите название компании: '),
+                FutureListCompanyName(),
+              ],
+            ),
+            const SizedBox(height: 20),
             phoneNumberTextField(context),
             const SizedBox(height: 20),
             emailTextField(context),
@@ -65,7 +75,7 @@ class _LoginFormState extends State<LoginForm> {
                 userId: DateTime.now().toString(),
                 companyName: companyNameController.text,
                 email: emailController.text,
-                phoneNumber: phoneNumberController.text);
+                phoneNumber: clearPhoneNumber(phoneNumberController.text));
             setState(() {
               context
                   .read<SignUpBloc>()
@@ -134,11 +144,16 @@ class _LoginFormState extends State<LoginForm> {
           return null;
         });
   }
+  var maskFormatter = MaskTextInputFormatter(
+  mask: '+7 (###) ###-##-##', 
+  filter: { "#": RegExp(r'[0-9]') },
+  type: MaskAutoCompletionType.lazy
+);
 
   TextFormField phoneNumberTextField(BuildContext context) {
     return TextFormField(
         controller: phoneNumberController,
-        inputFormatters: [formatter.MaskedInputFormatter('+7 (###) ###-##-##')],
+        inputFormatters: [ maskFormatter],
         decoration: InputDecoration(
           prefixIcon: const Icon(Icons.person),
           enabledBorder: OutlineInputBorder(
@@ -180,5 +195,48 @@ class _LoginFormState extends State<LoginForm> {
           }
           return null;
         });
+  }
+}
+
+class FutureListCompanyName extends StatelessWidget {
+  const FutureListCompanyName({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: FutureBuilder(future: ApiFromServer().getListCompany(), builder:((context, snapshot) {
+        print('Snapshot.data : ${snapshot.data}');
+        
+       if(snapshot.connectionState == ConnectionState.waiting)
+       {
+        return const  CircularProgressIndicator();
+       }
+       
+        if(snapshot.hasData){
+          String selectedItem = snapshot.data!.first;
+          return     DropdownButton(
+            itemHeight: 70,
+            isExpanded :true,
+           
+            value: selectedItem,
+            items:snapshot.data!.map((String value){
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value));
+          }).toList(),
+          
+           
+           onChanged: (value){
+      
+      
+           });
+        }
+        else{
+          return const Text('Please refresh page');
+        }
+      })),
+    );
   }
 }

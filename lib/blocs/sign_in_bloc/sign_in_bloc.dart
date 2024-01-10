@@ -4,10 +4,10 @@ import 'package:equatable/equatable.dart';
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 
-class SignInBlocBloc extends Bloc<SignInBlocEvent, SignInBlocState> {
-  SignInBlocBloc() : super(SignInBlocInitial()) {
-    on<SignInBlocEvent>((event, emit) {
-      // TODO: implement event handler
+class SignInBloc extends Bloc<SignInEvent, SignInState> {
+  SignInBloc() : super(SignInBlocInitial()) {
+    on<SignInRequired>((event, emit) {
+      
     });
   }
 }

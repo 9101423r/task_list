@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:task_list/data/hive_local_storage/comment_hive_local_storage.dart';
-import 'package:task_list/domain/models/comments_model.dart';
-import 'package:task_list/domain/models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/comments_model.dart';
+import 'package:task_list/domain/models/hive_models/task_model.dart';
 
 class LocalCommentRepository {
   final _commentBox = CommentHiveLocalStorage().refreshBox();
@@ -22,9 +22,7 @@ class LocalCommentRepository {
     _commentBox.watch().listen((event) {
       _updateComments(); //TODO
     });
-    // if(_commentsController.stream){
-
-    // }
+    
   }
 
   void _updateComments() {
@@ -33,6 +31,7 @@ class LocalCommentRepository {
         .toList();
     _commentsController.add(listComment);
   }
+  
 
   void dispose() {
     _commentsController.close();

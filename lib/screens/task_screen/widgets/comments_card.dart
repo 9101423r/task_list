@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_list/domain/models/comments_model.dart';
+
+import 'package:task_list/domain/models/hive_models/comments_model.dart';
 
 class CommentsCard extends StatelessWidget {
   final Comment comment;

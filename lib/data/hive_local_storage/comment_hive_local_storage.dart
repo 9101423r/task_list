@@ -1,7 +1,8 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
-import 'package:task_list/domain/models/comments_model.dart';
-import 'package:task_list/domain/models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/comments_model.dart';
+import 'package:task_list/domain/models/hive_models/task_model.dart';
+
 
 class CommentHiveLocalStorage {
   String boxName = 'commentBox';

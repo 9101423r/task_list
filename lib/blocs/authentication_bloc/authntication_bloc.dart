@@ -14,6 +14,11 @@ class AuthenticationBloc extends Bloc<AuthnticationEvent, AuthenticationState> {
 
   AuthenticationBloc({required this.userRepository})
       : super(const AuthenticationState.unknown()) {
+final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      add(AuthenticationUserChanged(currentUser));
+    }
+
     userSubscription = userRepository.user.listen((user) {
       add(AuthenticationUserChanged(user)); // TODO Check 53:51 user?
     });

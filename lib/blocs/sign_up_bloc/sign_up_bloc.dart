@@ -22,7 +22,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       } catch (e) {
         emit(const SignUpFailure(signIsSuccses: false));
       }
-      // TODO: implement event handler
+    
+    });
+    on<GetListCompanyName>((event, emit){
+      
     });
   }
 }

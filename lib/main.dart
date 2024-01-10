@@ -14,7 +14,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Bloc.observer = MyGlobalObserver();
-  openBox();
+  await openBox();
 
   runApp(MyApp(FirebaseUserRepo()));
 }

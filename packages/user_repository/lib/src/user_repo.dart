@@ -12,10 +12,4 @@ abstract class UserRepository {
   Future<void> signIn(String email, String password);
 }
 
-class FakeUser {
-  String email;
-  String companyName;
-  String password;
-  FakeUser(
-      {required this.email, required this.companyName, required this.password});
-}
+

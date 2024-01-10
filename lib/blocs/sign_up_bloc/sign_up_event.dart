@@ -14,3 +14,8 @@ class SignUpRequired extends SignUpEvent {
 
   const SignUpRequired(this.user, this.password);
 }
+
+class GetListCompanyName extends SignUpEvent{
+  final String selectedItem;
+  const GetListCompanyName({required this.selectedItem});
+}

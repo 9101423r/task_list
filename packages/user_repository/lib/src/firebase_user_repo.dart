@@ -7,7 +7,7 @@ import 'user_repo.dart';
 
 class FirebaseUserRepo implements UserRepository {
   final FirebaseAuth _firebaseAuth;
-  final usersCollection = FirebaseFirestore.instance.collection('company');
+  final usersCollection = FirebaseFirestore.instance.collection('user');
 
   FirebaseUserRepo({FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
@@ -50,8 +50,6 @@ class FirebaseUserRepo implements UserRepository {
   Future<void> setUserData(MyUser myUser) async {
     try {
       await usersCollection
-          .doc(myUser.companyName)
-          .collection('users')
           .doc(myUser.email)
           .set(myUser.toEntity().toDocument());
     } catch (e) {
