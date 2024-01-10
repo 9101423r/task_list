@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'task_model.dart';
+part of 'task.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -8,7 +8,7 @@ part of 'task_model.dart';
 
 class TaskAdapter extends TypeAdapter<Task> {
   @override
-  final int typeId = 14;
+  final int typeId = 1;
 
   @override
   Task read(BinaryReader reader) {

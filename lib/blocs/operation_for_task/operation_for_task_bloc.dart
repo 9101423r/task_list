@@ -6,7 +6,7 @@ import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
 import 'package:task_list/domain/api/list_compain.dart';
 import 'package:task_list/domain/api/local_task_repository.dart';
 import 'package:task_list/domain/auth/firebase_auth.dart';
-import 'package:task_list/domain/models/hive_models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 import 'package:task_list/screens/task_screen/task_page.dart';
 import 'package:uuid/uuid.dart';

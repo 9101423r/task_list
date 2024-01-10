@@ -35,7 +35,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     });
 
     on<SwipeWithAnotherPage>(((event, emit) {
-    Navigator.pushNamed(event.context,'/sign_screen');
-     }));
+      event.swipePage ? emit(LoginPage()) : emit(SignInPage());
+    
+    }));
   }
 }

@@ -11,18 +11,14 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc() : super(SignInBlocInitial()) {
     on<SignInRequired>((event, emit)async {
        emit(const SignInProcess());
-      try{
-        await Authentication().login(event.email,event.password);
-        emit(const SignInSuccess());
-      }
-      catch (e){
-        emit(const SignInFailure());
-        print(e);
-      }
+       await Authentication().login(event.email,event.password) ?
+        emit(const SignInSuccess()) :
+       emit(const SignInFailure());
+       
       
     });
     on<SwipeWithAnotherPage>(((event, emit) {
-    Navigator.pushReplacementNamed(event.context,'/login_screen');
+    Navigator.pop(event.context);
      }));
   
   }

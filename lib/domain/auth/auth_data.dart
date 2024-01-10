@@ -6,12 +6,14 @@ import 'package:task_list/domain/models/user_model.dart';
 class Authentication{
   
   Future<bool> login(String email, String password) async {
-     try{await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email.trim(), password: password.trim());
-        return true; 
+     try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email.trim(), password: password.trim());
+      return true; 
         }
   on FirebaseAuthException catch(exceptions){
     dev.log(exceptions.toString());
+    print(exceptions.toString());
      return false;
   }
   }

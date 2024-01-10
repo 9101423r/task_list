@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
-import 'package:task_list/domain/models/hive_models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 
 import 'package:task_list/screens/home_screen/widgets/task_card.dart';

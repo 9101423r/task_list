@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
 
-import '../models/hive_models/task_model.dart';
+import '../models/hive_models/task.dart';
 
 class TaskRepository {
   final _taskBox = TaskHiveLocalStorage().box;

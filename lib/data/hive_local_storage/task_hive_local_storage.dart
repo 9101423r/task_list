@@ -1,5 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:task_list/domain/models/hive_models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 
 class TaskHiveLocalStorage {

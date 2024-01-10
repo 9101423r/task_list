@@ -3,7 +3,7 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:task_list/domain/models/hive_models/comments_model.dart';
-import 'package:task_list/domain/models/hive_models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 
 
@@ -40,10 +40,10 @@ Future<void> openBox() async{
 
 openBox1()async{
   try {
-  
+  Hive.registerAdapter<TaskAdapter>(TaskAdapter() as TypeAdapter<TaskAdapter>);
   
   await Hive.openBox<Task>('taskBox');
-Hive.registerAdapter(TaskAdapter());
+
 } on Exception catch (error) {   
   print('Ошибка при открытии Box: $error');
 }
@@ -51,8 +51,9 @@ Hive.registerAdapter(TaskAdapter());
 
 openBox2() async{
   try {
+    Hive.registerAdapter<CommentAdapter>(CommentAdapter() as TypeAdapter<CommentAdapter>);
 await Hive.openBox<Comment>('commentBox');
-  Hive.registerAdapter(CommentAdapter());
+  
 
 } on Exception catch (error) {
   print('Ошибка при открытии Box: $error');

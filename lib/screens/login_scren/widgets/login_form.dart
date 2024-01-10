@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class LoginForm extends StatefulWidget {
+  
   const LoginForm({super.key});
 
   @override
@@ -88,22 +89,8 @@ class _LoginFormState extends State<LoginForm> {
             emailTextField(context),
             const SizedBox(height: 20),
             passwordTextField(context),
-            Row(
-              children: [
-                loginButton(context, state),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        context.read<SignUpBloc>().add(SwipeWithAnotherPage(context: context));
-                      });
-                    },
-                    child: const Text('Do you have account?',style: TextStyle(color: Colors.blue),), // TODO style
-                  ),
-                )
-              ],
-            )
+            loginButton(context, state),
+            
               
           ],
         ),
@@ -132,9 +119,6 @@ class _LoginFormState extends State<LoginForm> {
                   .add(SignUpRequired(myUser, passwordController.text));
             });
 
-            if(state is SignUpProcess){
-              Navigator.pushReplacementNamed(context, '/home');
-            }
           }
           print(
               'We must to going try register if server response good go HomePage,else show SnackBar with error ');

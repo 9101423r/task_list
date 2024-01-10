@@ -1,6 +1,9 @@
+
 import 'package:hive/hive.dart';
-part 'task_model.g.dart';
-@HiveType(typeId:14)
+part 'task.g.dart';
+
+
+@HiveType(typeId:1)
 class Task {
   @HiveField(1)
   final int id;
@@ -33,7 +36,7 @@ class Task {
       title: json['title'],
       descriptions: json['descriptions'],
       status: json['status'],
-      hours: json['hours'].toDouble(),
+      hours: json['hours'] as double,
       temporaryUUID: json['temporaryUUID'],
       comments: List<String>.from(json['comments'] ?? []),
     );

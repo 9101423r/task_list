@@ -4,7 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
 import 'package:task_list/domain/api/local_task_comment_repositoryt.dart';
 import 'package:task_list/domain/models/hive_models/comments_model.dart';
-import 'package:task_list/domain/models/hive_models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 import 'package:task_list/screens/task_screen/widgets/alert_dialog.dart';
 import 'package:task_list/screens/task_screen/widgets/comments_show.dart';

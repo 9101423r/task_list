@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:task_list/data/hive_local_storage/comment_hive_local_storage.dart';
 import 'package:task_list/domain/models/hive_models/comments_model.dart';
-import 'package:task_list/domain/models/hive_models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 class LocalCommentRepository {
   final _commentBox = CommentHiveLocalStorage().refreshBox();

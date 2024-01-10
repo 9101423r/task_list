@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
 import 'package:task_list/domain/api/local_task_repository.dart';
-import 'package:task_list/domain/models/hive_models/task_model.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 
 
