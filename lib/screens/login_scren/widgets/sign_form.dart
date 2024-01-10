@@ -44,17 +44,13 @@ class _SignFormState extends State<SignForm> {
     child: TextButton(
         onPressed: () {
           if (formKey.currentState!.validate()) {
-            setState(() {
+            
               context
                   .read<SignInBloc>()
                   .add(SignInRequired(  email: emailController.text,password:passwordController.text ));
-            });
+           
 
-            if(state is SignInSuccess){
-            
-              
-              
-            }
+          
           }
           print(
               'We must to going try register if server response good go HomePage,else show SnackBar with error ');

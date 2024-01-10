@@ -42,13 +42,13 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
           actions: [
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
+             
                     String title = taskTitleController.text;
                     String taskDescription = taskDescriptionController.text;
                     context
                         .read<OperationForTaskBloc>()
                         .add(OperationForTaskPressedOK(title, taskDescription));
-                  });
+                
                   Navigator.pop(context);
                   clearController();
                 },

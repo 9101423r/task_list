@@ -113,11 +113,11 @@ class _LoginFormState extends State<LoginForm> {
                  companyName: companyName,
                 fullName: fullNameController.text,                
                 phoneNumber: clearPhoneNumber(phoneNumberController.text));
-            setState(() {
+        
               context
                   .read<SignUpBloc>()
                   .add(SignUpRequired(myUser, passwordController.text));
-            });
+           
 
           }
           print(
