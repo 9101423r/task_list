@@ -1,31 +1,41 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:user_repository/user_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:task_list/domain/auth/auth_data.dart';
+import 'package:task_list/domain/auth/firebase_auth.dart';
+import 'package:task_list/domain/models/user_model.dart';
+
+
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  final UserRepository _userRepository;
+  
 
-  SignUpBloc({required UserRepository userRepository})
-      : _userRepository = userRepository,
-        super(const SignUpInitial(signIsSuccses: false)) {
+  SignUpBloc()
+      : super(const SignUpInitial()) {
+
+
     on<SignUpRequired>((event, emit) async {
-      emit(const SignUpProcess(signIsSuccses: false));
+      emit(const SignUpProcess());
       try {
         Future.delayed(const Duration(seconds: 5));
         const Duration(seconds: 5);
-        MyUser user = await _userRepository.signUp(event.user, event.password);
-        await _userRepository.setUserData(user);
-        emit(const SignUpSuccess(signIsSuccses: true));
+        MyUser user = await Authentication().signUp(event.user, event.password);
+        await  FirebaseUserAuth().createUser(user);
+        emit(const SignUpSuccess());
       } catch (e) {
-        emit(const SignUpFailure(signIsSuccses: false));
+        emit(const SignUpFailure());
       }
     
     });
     on<GetListCompanyName>((event, emit){
       
     });
+
+    on<SwipeWithAnotherPage>(((event, emit) {
+    Navigator.push(event.context,'/sign_screen');
+     }));
   }
 }

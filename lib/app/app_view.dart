@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:task_list/app/app_home.dart';
 
-import 'package:task_list/blocs/authentication_bloc/authntication_bloc.dart';
-import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
 import 'package:task_list/constants/app_theme.dart';
+import 'package:task_list/domain/models/hive_models/task_model.dart';
 import 'package:task_list/domain/provider/locale_provider.dart';
 import 'package:task_list/l10n/all_locales.dart';
 
 import 'package:task_list/screens/home_screen/home_screen.dart';
 import 'package:task_list/screens/login_scren/login_screen.dart';
+import 'package:task_list/screens/sign_screen/sign_home.dart';
+import 'package:task_list/screens/task_screen/task_page.dart';
 
 class MyAppView extends StatefulWidget {
   const MyAppView({super.key});
@@ -28,7 +29,7 @@ class _MyAppViewState extends State<MyAppView> {
         title: 'TaskList',
         debugShowCheckedModeBanner: false,
         localizationsDelegates: const [
-          AppLocalizations.delegate, 
+          AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
@@ -36,33 +37,21 @@ class _MyAppViewState extends State<MyAppView> {
         locale: localeProvider.locale,
         supportedLocales: AllLocale.all,
         theme: AppTheme.mainTheme,
-        home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-          if (state.status == AuthenticationStatus.authenticated) {
-            return BlocProvider(
-              create: (context) => OperationForTaskBloc(),
-              child: const HomeScreen(),
-            );
-          } else if (state.status == AuthenticationStatus.unauthenticated) {
-            return const LoginScreen();
-          } else if(state.status == AuthenticationStatus.unknown) {
-            return const Scaffold(
-              body: Center(
-                  child: Column(
-                children: [
-                  Text('Here must to be экран загрузки'),
-                  CircularProgressIndicator()
-                ],
-              )),
-            
-            )
-            ;
+        routes: {
+          '/' : (context) => const AppHome(),
+          '/login_screen': (context) => const LoginScreen(),
+          '/sign_screen': (context)=> const SignHome(),
+          '/home': (context) => const HomeScreen(),        
+        },
+        onGenerateRoute: (routes){
+          if(routes.name =='/task_screen'){
+             final Task task = routes.arguments as Task;
+           return MaterialPageRoute(
+            builder: (context) => TaskPage(task: task),
+          );
           }
-          else{
-            return Scaffold(
-              body:Container(color: Colors.purple)
-            );
-          }
-        }));
+        },
+        initialRoute:'/'
+        );
   }
 }

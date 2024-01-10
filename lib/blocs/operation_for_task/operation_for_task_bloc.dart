@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
 import 'package:task_list/domain/api/list_compain.dart';
 import 'package:task_list/domain/api/local_task_repository.dart';
+import 'package:task_list/domain/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/hive_models/task_model.dart';
 
 import 'package:task_list/screens/task_screen/task_page.dart';
@@ -22,13 +23,10 @@ class OperationForTaskBloc
       emit(TaskLoaded(tasks: tasks.values.toList()));
     });
     on<TaskTapped>((event, emit) {
-      Navigator.push(
+      Navigator.pushNamed(
           event.context,
-          MaterialPageRoute(
-              builder: (context) => TaskPage(
-                    task: event.task,
-                  )));
-      emit(OpenTask());
+            '/task_screen',arguments: event.task);
+                  emit(OpenTask());
     });
 
     on<ClearBoxTapped>((event, emit){
@@ -50,6 +48,9 @@ class OperationForTaskBloc
         print('PageRefreshed error: $error');
 
       }
+    });
+    on<SignOut>((event, emit) {
+      FirebaseUserAuth().logOut();
     });
   }
 

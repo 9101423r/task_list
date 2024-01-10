@@ -105,6 +105,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Text(AppLocalizations.of(context)!.changeLocale),
               ),
+              PopupMenuItem(
+                value: 'signOut',
+                onTap: () {
+                  setState(() {
+                    context.read<OperationForTaskBloc>().add(SignOut());
+                  });
+                },
+                child: const Text('LogOuT'),
+              ),
             ]);
   }
 }

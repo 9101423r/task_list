@@ -13,3 +13,8 @@ class SignInRequired extends SignInEvent{
   const SignInRequired({required this.email, required this.password});
   
 }
+class SwipeWithAnotherPage extends SignInEvent{
+  final BuildContext context;
+
+  const SwipeWithAnotherPage({required this.context});
+}

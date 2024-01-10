@@ -9,8 +9,8 @@ import 'package:task_list/domain/models/hive_models/task_model.dart';
 
 Future<void> openBox() async{
  
-      final documentDirectory = await getApplicationDocumentsDirectory();
-        Hive.init(documentDirectory.path);
+      // final documentDirectory = await getApplicationDocumentsDirectory();
+      //   Hive.init(documentDirectory.path);
 
   
  

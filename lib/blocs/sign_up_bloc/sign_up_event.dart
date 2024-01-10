@@ -19,3 +19,9 @@ class GetListCompanyName extends SignUpEvent{
   final String selectedItem;
   const GetListCompanyName({required this.selectedItem});
 }
+
+class SwipeWithAnotherPage extends SignUpEvent{
+  final BuildContext context;
+
+  const SwipeWithAnotherPage({required this.context});
+}

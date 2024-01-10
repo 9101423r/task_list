@@ -1,25 +1,25 @@
 part of 'sign_up_bloc.dart';
 
 sealed class SignUpState extends Equatable {
-  final bool signIsSuccses;
-  const SignUpState({required this.signIsSuccses});
+  
+  const SignUpState();
 
   @override
   List<Object> get props => [];
 }
 
 final class SignUpInitial extends SignUpState {
-  const SignUpInitial({required super.signIsSuccses});
+  const SignUpInitial();
 }
 
 class SignUpSuccess extends SignUpState {
-  const SignUpSuccess({required super.signIsSuccses});
+  const SignUpSuccess();
 }
 
 class SignUpFailure extends SignUpState {
-  const SignUpFailure({required super.signIsSuccses});
+  const SignUpFailure();
 }
 
 class SignUpProcess extends SignUpState {
-  const SignUpProcess({required super.signIsSuccses});
+  const SignUpProcess();
 }

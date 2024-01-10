@@ -29,7 +29,22 @@ class _SignFormState extends State<SignForm> {
         children: [
           emailTextField(context),
           passwordTextField(context),
-          singInButton(context,state)
+          Row(
+            children: [
+              singInButton(context,state),
+               Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        context.read<SignInBloc>().add(SwipeWithAnotherPage(context: context));
+                      });
+                    },
+                    child: Text('Do you have account?',style: TextStyle(color: Colors.blue),), // TODO style
+                  ),
+                )
+            ],
+          )
         ],
       ));
     });
@@ -47,6 +62,14 @@ class _SignFormState extends State<SignForm> {
                   .read<SignInBloc>()
                   .add(SignInRequired(  email: emailController.text,password:passwordController.text ));
             });
+
+            if(state is SignInSuccess){
+              setState(() {
+                
+              });
+              Navigator.pushReplacementNamed(context, '/');
+              
+            }
           }
           print(
               'We must to going try register if server response good go HomePage,else show SnackBar with error ');

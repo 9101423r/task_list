@@ -4,9 +4,10 @@ import 'package:task_list/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:task_list/constants/app_text_styles.dart';
 import 'package:task_list/constants/validator.dart';
 import 'package:task_list/domain/api/list_compain.dart';
+import 'package:task_list/domain/models/user_model.dart';
 import 'package:task_list/screens/login_scren/widgets/company_name_drop_down.dart';
 import 'package:task_list/screens/login_scren/widgets/my_text_field.dart';
-import 'package:user_repository/user_repository.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -20,16 +21,17 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   TextEditingController emailController = TextEditingController();
-  TextEditingController companyNameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController repeadPasswordController = TextEditingController();
+  TextEditingController fullNameController= TextEditingController();
 
   final formKey = GlobalKey<FormState>();
   IconData iconOpenPassword = Icons.lock_open;
   bool obscurePassword = true;
   
   String? _errorMsg;
+
+  String companyName = 'NO company';
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +44,42 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 20),
             companyNameTextField(context),
             const SizedBox(height: 20),
-            const Row(
+            Row(
               children: [
-                Text('Выберите название компании: '),
-                FutureListCompanyName(),
+                const Text('Выберите название компании: '),
+                Expanded(
+      child: FutureBuilder(future: ApiFromServer().getListCompany(), builder:((context, snapshot) {
+        print('Snapshot.data : ${snapshot.data}');
+        
+       if(snapshot.connectionState == ConnectionState.waiting)
+       {
+        return const  CircularProgressIndicator();
+       }
+       
+        if(snapshot.hasData){
+          companyName = snapshot.data!.first;
+          return     DropdownButton(
+            itemHeight: 70,
+            isExpanded :true,
+           
+            value: companyName,
+            items:snapshot.data!.map((String value){
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value));
+          }).toList(),
+          
+           
+           onChanged: (value){
+      
+      
+           });
+        }
+        else{
+          return const Text('Please refresh page');
+        }
+      })),
+    )
               ],
             ),
             const SizedBox(height: 20),
@@ -54,7 +88,22 @@ class _LoginFormState extends State<LoginForm> {
             emailTextField(context),
             const SizedBox(height: 20),
             passwordTextField(context),
-            loginButton(context, state)
+            Row(
+              children: [
+                loginButton(context, state),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        context.read<SignUpBloc>().add(SwipeWithAnotherPage(context: context));
+                      });
+                    },
+                    child: const Text('Do you have account?',style: TextStyle(color: Colors.blue),), // TODO style
+                  ),
+                )
+              ],
+            )
               
           ],
         ),
@@ -73,14 +122,19 @@ class _LoginFormState extends State<LoginForm> {
             MyUser myUser = MyUser.empty;
             myUser = myUser.copyWith(
                 userId: DateTime.now().toString(),
-                companyName: companyNameController.text,
-                email: emailController.text,
+                 email: emailController.text,
+                 companyName: companyName,
+                fullName: fullNameController.text,                
                 phoneNumber: clearPhoneNumber(phoneNumberController.text));
             setState(() {
               context
                   .read<SignUpBloc>()
                   .add(SignUpRequired(myUser, passwordController.text));
             });
+
+            if(state is SignUpProcess){
+              Navigator.pushReplacementNamed(context, '/home');
+            }
           }
           print(
               'We must to going try register if server response good go HomePage,else show SnackBar with error ');
@@ -183,7 +237,7 @@ class _LoginFormState extends State<LoginForm> {
 
   MyTextField companyNameTextField(BuildContext context) {
     return MyTextField(
-        controller: companyNameController,
+        controller: fullNameController,
         hintText: AppLocalizations.of(context)!.loginCompanyName,
         obscureText: false,
         keyboardType: TextInputType.name,
@@ -198,45 +252,45 @@ class _LoginFormState extends State<LoginForm> {
   }
 }
 
-class FutureListCompanyName extends StatelessWidget {
-  const FutureListCompanyName({
-    super.key,
-  });
+// class FutureListCompanyName extends StatelessWidget {
+//   const FutureListCompanyName({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: FutureBuilder(future: ApiFromServer().getListCompany(), builder:((context, snapshot) {
-        print('Snapshot.data : ${snapshot.data}');
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       child: FutureBuilder(future: ApiFromServer().getListCompany(), builder:((context, snapshot) {
+//         print('Snapshot.data : ${snapshot.data}');
         
-       if(snapshot.connectionState == ConnectionState.waiting)
-       {
-        return const  CircularProgressIndicator();
-       }
+//        if(snapshot.connectionState == ConnectionState.waiting)
+//        {
+//         return const  CircularProgressIndicator();
+//        }
        
-        if(snapshot.hasData){
-          String selectedItem = snapshot.data!.first;
-          return     DropdownButton(
-            itemHeight: 70,
-            isExpanded :true,
+//         if(snapshot.hasData){
+//           String selectedItem = snapshot.data!.first;
+//           return     DropdownButton(
+//             itemHeight: 70,
+//             isExpanded :true,
            
-            value: selectedItem,
-            items:snapshot.data!.map((String value){
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value));
-          }).toList(),
+//             value: selectedItem,
+//             items:snapshot.data!.map((String value){
+//             return DropdownMenuItem<String>(
+//               value: value,
+//               child: Text(value));
+//           }).toList(),
           
            
-           onChanged: (value){
+//            onChanged: (value){
       
       
-           });
-        }
-        else{
-          return const Text('Please refresh page');
-        }
-      })),
-    );
-  }
-}
+//            });
+//         }
+//         else{
+//           return const Text('Please refresh page');
+//         }
+//       })),
+//     );
+//   }
+// }

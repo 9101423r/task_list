@@ -37,3 +37,7 @@ class ClearBoxTapped extends OperationForTaskEvent{
 class PageRefreshed extends OperationForTaskEvent{
   
 }
+
+class SignOut extends OperationForTaskEvent{
+  
+}

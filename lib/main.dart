@@ -6,7 +6,7 @@ import 'package:task_list/data/open_hive_box.dart';
 import 'package:task_list/simple_bloc_observer.dart';
 
 import 'firebase_options.dart';
-import 'package:user_repository/user_repository.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,5 +16,5 @@ void main() async {
   Bloc.observer = MyGlobalObserver();
   await openBox();
 
-  runApp(MyApp(FirebaseUserRepo()));
+  runApp(const MyApp());
 }
