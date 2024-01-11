@@ -17,36 +17,29 @@ part 'operation_for_task_state.dart';
 class OperationForTaskBloc
     extends Bloc<OperationForTaskEvent, OperationForTaskState> {
   OperationForTaskBloc() : super(AddingTaskInitial()) {
-    on<OperationForTaskPressedOK>((event, emit)async => addingTask(event, emit));
-    on<LoadTaskEvent>((event, emit) {
-      final tasks = TaskHiveLocalStorage().box;
-      emit(TaskLoaded(tasks: tasks.values.toList()));
-    });
+    on<OperationForTaskPressedOK>(
+        (event, emit) async => addingTask(event, emit));
+
     on<TaskTapped>((event, emit) {
-      Navigator.pushNamed(
-          event.context,
-            '/task_screen',arguments: event.task);
-                  emit(OpenTask());
+      Navigator.pushNamed(event.context, '/task_screen', arguments: event.task);
+      emit(OpenTask());
     });
 
-    on<ClearBoxTapped>((event, emit){
+    on<ClearBoxTapped>((event, emit) {
       TaskRepository().clearBox();
     });
 
-
-    on<PageRefreshed>((event, emit)  async{
-      try{
-        if(true){ // if datas come here some logic  TODO
-
-        } 
+    on<PageRefreshed>((event, emit) async {
+      try {
+        if (true) {
+          // if datas come here some logic  TODO
+        }
         // ignore: dead_code
-        else{ // else 
-
-        } 
-      }
-      catch(error){
+        else {
+          // else
+        }
+      } catch (error) {
         print('PageRefreshed error: $error');
-
       }
     });
     on<SignOut>((event, emit) {
@@ -54,25 +47,39 @@ class OperationForTaskBloc
     });
   }
 
-  Future<void> addingTask(OperationForTaskPressedOK event, Emitter<OperationForTaskState> emit) async {
+  Future<void> addingTask(OperationForTaskPressedOK event,
+      Emitter<OperationForTaskState> emit) async {
     {
-          late Task newTask;
-          List<String> listStr = [];
-         try {
-           int id = await ApiFromServer().getId();        
-           newTask = Task(id: id, title: event.title, descriptions:event.descriptipions, status:1, hours:0, temporaryUUID:'null', comments: listStr);
-           TaskRepository().addTask(newTask);
-           print(newTask.temporaryUUID);
-           emit(AddingTaskSuccess());
-         } on Exception catch (e) {
-           print(e);
-           print('Надо сообщит пользователю что не пришло ответ сервера и этого не будет в общем хранилище ');
-           print('Создаеься экзампляр с уникальным temporaryUUID');
-           newTask = Task(id: 0, title:event.title, descriptions:event.descriptipions, status:1, hours:0, temporaryUUID:const Uuid().v4(), comments:listStr);
-           TaskRepository().addTask(newTask);
-         }
-       }
+      late Task newTask;
+      List<String> listStr = [];
+      try {
+        int id = await ApiFromServer().getId();
+        newTask = Task(
+            id: id,
+            title: event.title,
+            descriptions: event.descriptipions,
+            status: 1,
+            hours: 0,
+            temporaryUUID: 'null',
+            comments: listStr);
+        TaskRepository().addTask(newTask);
+        print(newTask.temporaryUUID);
+        emit(AddingTaskSuccess());
+      } on Exception catch (e) {
+        print(e);
+        print(
+            'Надо сообщит пользователю что не пришло ответ сервера и этого не будет в общем хранилище ');
+        print('Создается экзампляр с уникальным temporaryUUID');
+        newTask = Task(
+            id: 0,
+            title: event.title,
+            descriptions: event.descriptipions,
+            status: 1,
+            hours: 0,
+            temporaryUUID: const Uuid().v4(),
+            comments: listStr);
+        TaskRepository().addTask(newTask);
+      }
+    }
   }
-
-
 }

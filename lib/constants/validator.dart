@@ -10,9 +10,9 @@ String? emailCheck(String? email) {
   return null;
 }
 
-String clearPhoneNumber(String number){
-  String rightNumber = '8${number.substring(1,2)}${number.substring(4,7)}${number.substring(9,12)}${number.substring(13,15)}${number.substring(17)}';
+String clearPhoneNumber(String number) {
+  String rightNumber =
+      '8${number.substring(1, 2)}${number.substring(4, 7)}${number.substring(9, 12)}${number.substring(13, 15)}${number.substring(17)}';
   print(rightNumber);
   return rightNumber;
-
 }

@@ -24,7 +24,7 @@ class AppHome extends StatelessWidget {
           } else {
             return  BlocProvider(
               create: (context) => SignOrLoginBloc(),
-              child: LoginScreen(),
+              child: const LoginScreen(),
             );
           }
         });

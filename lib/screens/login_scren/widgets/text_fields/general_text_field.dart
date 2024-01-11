@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class MyTextField extends StatelessWidget {
+class GeneralTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
@@ -15,7 +14,7 @@ class MyTextField extends StatelessWidget {
   // final TextInputFormatter? inputFormatter;
   final String? Function(String?)? onChanged;
 
-  const MyTextField({
+  const GeneralTextField({
     super.key,
     required this.controller,
     required this.hintText,

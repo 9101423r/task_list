@@ -10,19 +10,11 @@ sealed class SignUpEvent extends Equatable {
 class SignUpRequired extends SignUpEvent {
   final MyUser user;
   final String password;
-  
 
   const SignUpRequired(this.user, this.password);
 }
 
-class GetListCompanyName extends SignUpEvent{
+class GetListCompanyName extends SignUpEvent {
   final String selectedItem;
   const GetListCompanyName({required this.selectedItem});
 }
-
-class SwipeWithAnotherPage extends SignUpEvent{
-  final bool swipePage;
-
-  const SwipeWithAnotherPage({required this.swipePage});
-}
-

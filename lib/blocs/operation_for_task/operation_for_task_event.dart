@@ -14,10 +14,6 @@ class OperationForTaskPressedOK extends OperationForTaskEvent {
   const OperationForTaskPressedOK(this.title, this.descriptipions);
 }
 
-class FetchTasks extends OperationForTaskEvent {}
-
-class LoadTaskEvent extends OperationForTaskEvent {}
-
 class DeleteTask extends OperationForTaskEvent {
   final int taskId;
 
@@ -30,14 +26,8 @@ class TaskTapped extends OperationForTaskEvent {
   const TaskTapped({required this.context, required this.task});
 }
 
-class ClearBoxTapped extends OperationForTaskEvent{
-  
-}
+class ClearBoxTapped extends OperationForTaskEvent {}
 
-class PageRefreshed extends OperationForTaskEvent{
-  
-}
+class PageRefreshed extends OperationForTaskEvent {}
 
-class SignOut extends OperationForTaskEvent{
-  
-}
+class SignOut extends OperationForTaskEvent {}
