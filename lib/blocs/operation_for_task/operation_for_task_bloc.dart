@@ -1,14 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-
-import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
 import 'package:task_list/domain/api/list_compain.dart';
 import 'package:task_list/domain/api/local_task_repository.dart';
 import 'package:task_list/domain/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
-
-import 'package:task_list/screens/task_screen/task_page.dart';
 import 'package:uuid/uuid.dart';
 
 part 'operation_for_task_event.dart';
@@ -38,9 +34,7 @@ class OperationForTaskBloc
         else {
           // else
         }
-      } catch (error) {
-        print('PageRefreshed error: $error');
-      }
+      } catch (error) {}
     });
     on<SignOut>((event, emit) {
       FirebaseUserAuth().logOut();
@@ -63,13 +57,9 @@ class OperationForTaskBloc
             temporaryUUID: 'null',
             comments: listStr);
         TaskRepository().addTask(newTask);
-        print(newTask.temporaryUUID);
         emit(AddingTaskSuccess());
       } on Exception catch (e) {
-        print(e);
-        print(
-            'Надо сообщит пользователю что не пришло ответ сервера и этого не будет в общем хранилище ');
-        print('Создается экзампляр с уникальным temporaryUUID');
+        // TODO
         newTask = Task(
             id: 0,
             title: event.title,

@@ -10,6 +10,7 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: const Color.fromARGB(255, 232, 244, 250),
       child: GestureDetector(
         onTap: () {
           context

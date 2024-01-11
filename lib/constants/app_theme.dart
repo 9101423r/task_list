@@ -8,7 +8,7 @@ class AppTheme {
         borderRadius: BorderRadius.circular(8),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-      color: const Color.fromARGB(255, 232, 244, 250),
+      color: Colors.white,
       elevation: 0.0,
     ),
     listTileTheme: const ListTileThemeData(

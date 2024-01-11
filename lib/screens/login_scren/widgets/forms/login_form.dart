@@ -5,13 +5,11 @@ import 'package:task_list/constants/app_text_styles.dart';
 import 'package:task_list/constants/validator.dart';
 import 'package:task_list/domain/api/list_compain.dart';
 import 'package:task_list/domain/models/user_model.dart';
-import 'package:task_list/screens/login_scren/widgets/company_name_drop_down.dart';
 import 'package:task_list/screens/login_scren/widgets/text_fields/email_text_field.dart';
 import 'package:task_list/screens/login_scren/widgets/text_fields/general_text_field.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:task_list/screens/login_scren/widgets/text_fields/password_text_field.dart';
 
 class LoginForm extends StatefulWidget {
@@ -58,34 +56,38 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget futureCompanyListName() {
     return Card(
-        child: Row(
-      children: [
-        const Text('Выберите название компании: '),
-        Expanded(
-          child: FutureBuilder(
-              future: ApiFromServer().getListCompany(),
-              builder: ((context, snapshot) {
-                print('Snapshot.data : ${snapshot.data}');
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                if (snapshot.hasData) {
-                  companyName = snapshot.data!.first;
-                  return DropdownButton(
-                      itemHeight: 70,
-                      isExpanded: true,
-                      value: companyName,
-                      items: snapshot.data!.map((String value) {
-                        return DropdownMenuItem<String>(
-                            value: value, child: Text(value));
-                      }).toList(),
-                      onChanged: (value) {});
-                } else {
-                  return const Text('Please refresh page');
-                }
-              })),
-        )
-      ],
+        child: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.06,
+      child: Row(
+        children: [
+          const Text('Выберите название компании:',
+              style: AppTextStyles.companyName, maxLines: 2),
+          Expanded(
+            child: FutureBuilder(
+                future: ApiFromServer().getListCompany(),
+                builder: ((context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.hasData) {
+                    companyName = snapshot.data!.first;
+                    return DropdownButton(
+                        itemHeight: 70,
+                        isExpanded: true,
+                        value: companyName,
+                        items: snapshot.data!.map((String value) {
+                          return DropdownMenuItem<String>(
+                              value: value, child: Text(value));
+                        }).toList(),
+                        onChanged: (value) {});
+                  } else {
+                    return const Text('Please refresh page',
+                        style: AppTextStyles.companyName);
+                  }
+                })),
+          )
+        ],
+      ),
     ));
   }
 
@@ -97,17 +99,17 @@ class _LoginFormState extends State<LoginForm> {
             if (formKey.currentState!.validate()) {
               MyUser myUser = MyUser.empty;
               myUser = myUser.copyWith(
-                  userId: DateTime.now().toString(), // TODO возможно ошибка при одновремнной регистрации
+                  userId: DateTime.now()
+                      .toString(), // TODO возможно ошибка при одновремнной регистрации
                   email: emailController.text,
                   companyName: companyName,
                   fullName: fullNameController.text,
-                  phoneNumber: clearPhoneNumber(phoneNumberController.text));
+                  phoneNumber:
+                      Validator().clearPhoneNumber(phoneNumberController.text));
               context
                   .read<SignUpBloc>()
                   .add(SignUpRequired(myUser, passwordController.text));
             }
-            print(
-                'We must to going try register if server response good go HomePage,else show SnackBar with error ');
           },
           child: state is SignUpProcess
               ? const CircularProgressIndicator()
@@ -118,16 +120,11 @@ class _LoginFormState extends State<LoginForm> {
         ));
   }
 
-  var maskFormatter = MaskTextInputFormatter(
-      mask: '+7 (###) ###-##-##',
-      filter: {'#': RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy);
-
   Widget phoneNumberTextField(BuildContext context) {
     return Card(
       child: TextFormField(
           controller: phoneNumberController,
-          inputFormatters: [maskFormatter],
+          inputFormatters: [Validator().maskFormatter],
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.person),
             enabledBorder: OutlineInputBorder(

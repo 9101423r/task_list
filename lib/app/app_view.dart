@@ -10,7 +10,6 @@ import 'package:task_list/domain/provider/locale_provider.dart';
 import 'package:task_list/l10n/all_locales.dart';
 import 'package:task_list/screens/task_screen/task_page.dart';
 
-
 class MyAppView extends StatefulWidget {
   const MyAppView({super.key});
 
@@ -34,15 +33,15 @@ class _MyAppViewState extends State<MyAppView> {
         locale: localeProvider.locale,
         supportedLocales: AllLocale.all,
         theme: AppTheme.mainTheme,
-        onGenerateRoute: (routes){
-          if(routes.name =='/task_screen'){
-             final Task task = routes.arguments as Task;
-           return MaterialPageRoute(
-            builder: (context) => TaskPage(task: task),
-          );
+        onGenerateRoute: (routes) {
+          if (routes.name == '/task_screen') {
+            final Task task = routes.arguments as Task;
+            return MaterialPageRoute(
+              builder: (context) => TaskPage(task: task),
+            );
           }
+          return null;
         },
-        home:const AppHome()
-        );
+        home: const AppHome());
   }
 }

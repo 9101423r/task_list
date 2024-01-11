@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
+import 'package:task_list/domain/api/local_task_repository.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 
-import 'package:task_list/screens/home_screen/widgets/task_card.dart';
+import 'package:task_list/screens/home_screen/widgets/elements/task_card.dart';
 
-class HomeBody extends StatelessWidget {
-  final Stream<List<Task>>? stream;
+class HomeBody extends StatefulWidget {
+  const HomeBody({super.key});
 
-  const HomeBody({required this.stream, super.key});
+  @override
+  State<HomeBody> createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<HomeBody> {
+  late Stream<List<Task>> taskStreamController;
+  @override
+  void initState() {
+    super.initState();
+    taskStreamController = TaskRepository().tasksStream;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +28,8 @@ class HomeBody extends StatelessWidget {
         context.read<OperationForTaskBloc>().add(PageRefreshed());
       },
       child: StreamBuilder<List<Task>>(
-          stream: stream,
+          stream: taskStreamController,
+          initialData: TaskRepository().listTask,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -26,7 +38,7 @@ class HomeBody extends StatelessWidget {
                   },
                   itemCount: snapshot.data!.toList().length);
             } else {
-              return const Center(child: Text("JUST TEXT"));
+              return const Center(child: Text('JUST TEXT'));
             }
           }),
     );
