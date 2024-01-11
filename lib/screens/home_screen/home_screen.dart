@@ -19,11 +19,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _tasksRepository = TaskRepository();
+  // late Stream<List<Task>> _taskStream;
+
   @override
   void initState() {
     super.initState();
-    TaskRepository();
+    _tasksRepository;
+
+    print('Check hot reload + another hot reload');
   }
+
+ @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  print(1);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +51,19 @@ class _HomeScreenState extends State<HomeScreen> {
               context.read<OperationForTaskBloc>().add(PageRefreshed());
             },
             child: StreamBuilder<List<Task>>(
-                stream: TaskRepository().tasksStream,
+                stream:_tasksRepository.tasksStream,
+                initialData: _tasksRepository.listTask,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  print('Snapshot data: ${snapshot.data}');
+print('Check List: ${_tasksRepository.listTask}');
+                  if (snapshot.hasData ) {
                     return ListView.builder(
                         itemBuilder: (context, index) {
                           return TaskCard(task: snapshot.data!.toList()[index]);
                         },
-                        itemCount: snapshot.data!.toList().length);
+                        itemCount:snapshot.data!.toList().length);
                   } else {
-                    return const Center(child: Text("JUST TEXT"));
+                    return const Center(child: Text('JUST TEXT'));
                   }
                 }),
           ),

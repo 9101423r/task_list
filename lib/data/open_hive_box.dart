@@ -7,12 +7,12 @@ import 'package:task_list/domain/models/hive_models/comments_model.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 
 Future<void> openBox() async {
-  // if (kIsWeb) {
-  //   if (Platform.isAndroid) {
-  //     final documentDirectory = await getApplicationDocumentsDirectory();
-  //     Hive.init(documentDirectory.path);
-  //   }
-  // }
+
+    if (Platform.isAndroid) {
+      final documentDirectory = await getApplicationDocumentsDirectory();
+      Hive.init(documentDirectory.path);
+    }
+
 
   await openBox1();
   await openBox2();

@@ -8,23 +8,43 @@ class TaskRepository {
   final _taskBox = TaskHiveLocalStorage().box;
 
   late StreamController<List<Task>> _tasksController;
-  late List<Task> _cachedTasks;
+
 
   Stream<List<Task>> get tasksStream => _tasksController.stream;
 
+  List<Task> listTask = [];
+
+  List<Task> getListTaskLikeInitialData(){{
+    listTask = _taskBox.values.toList();
+    return listTask;
+  }
+  }
   TaskRepository() {
     _tasksController = StreamController<List<Task>>.broadcast();
-    _cachedTasks = _taskBox.values.toList();
     _loadTasks();
+    getListTaskLikeInitialData();
   }
 
+
+  void getloadTasks(){
+    _loadTasks();
+  }
   void _loadTasks() {
-    _tasksController.add(_cachedTasks);
+  //  _tasksController.stream.listen((e) => print(e));
+    if (!_tasksController.hasListener) {
+//      _tasksController.stream.listen((e) => print(e));
+    } else {
+      print('Stream has already been listened');
+    }
+
+    print('TaskBox values: ${_taskBox.values.toList()}');
+
+    // _tasksController.add(_taskBox.values.toList());
 
     _taskBox.watch().listen((event) {
-      _cachedTasks = _taskBox.values.toList();
-      _tasksController.add(_cachedTasks);
+      _tasksController.add(_taskBox.values.toList());
     });
+
   }
 
   void addTask(Task task) async{
@@ -43,6 +63,6 @@ class TaskRepository {
   }
 
   void dispose() {
-    _tasksController.close();
+   // _tasksController.close();
   }
 }
