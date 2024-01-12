@@ -13,5 +13,6 @@
   "clearBox": "Clear all",
   "changeLocale": "Change Locale",
   "changeTheme": "Change Theme",
-  "status": "Status"
+  "status": "Status",
+  "fullName": "Fullname"
 }

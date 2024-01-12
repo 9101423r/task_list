@@ -21,4 +21,5 @@ class LocaleProvider with ChangeNotifier {
       setLocale(AllLocale.all[0]);
     }
   }
+
 }

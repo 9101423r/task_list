@@ -1,9 +1,7 @@
-
 import 'package:hive/hive.dart';
 part 'task.g.dart';
 
-
-@HiveType(typeId:1)
+@HiveType(typeId: 1)
 class Task {
   @HiveField(1)
   final int id;
@@ -19,26 +17,33 @@ class Task {
   String temporaryUUID;
   @HiveField(7)
   List<String> comments;
+  @HiveField(8)
+  String refKey;
+  @HiveField(9)
+  String typeTask;
   Task(
-      {
-        required this.id,
-        required this.title,        
-        required this.descriptions,
+      {required this.id,
+      required this.title,
+      required this.descriptions,
       required this.status,
       required this.hours,
       required this.temporaryUUID,
       required this.comments,
-});
+      required this.refKey,
+      required this.typeTask});
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-      id: json['id'],
-      title: json['title'],
-      descriptions: json['descriptions'],
-      status: json['status'],
-      hours: json['hours'] as double,
-      temporaryUUID: json['temporaryUUID'],
-      comments: List<String>.from(json['comments'] ?? []),
-    );
+        id: json['id'],
+        title: json['title'],
+        descriptions: json['descriptions'],
+        status: json['status'],
+        hours: json['hours'] as double,
+        temporaryUUID: json['temporaryUUID'],
+        comments: List<String>.from(
+          json['comments'] ?? [],
+        ),
+        refKey: json['Ref_Key'],
+        typeTask: json['Description']);
   }
 }

@@ -47,6 +47,11 @@ class _TaskPageState extends State<TaskPage> {
   Column bodyMain(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       JustText(stringType: 'Name', stringSpec: widget.task.title),
+      Divider(),
+      JustText(stringType: 'Type', stringSpec: widget.task.typeTask),
+      Divider(),
+      JustText(stringType: 'RefKey', stringSpec: widget.task.refKey),
+      Divider(),
       JustText(
           stringType: 'Descriptions', stringSpec: widget.task.descriptions),
       BlocProvider(

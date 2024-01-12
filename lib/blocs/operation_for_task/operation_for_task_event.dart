@@ -10,8 +10,11 @@ sealed class OperationForTaskEvent extends Equatable {
 class OperationForTaskPressedOK extends OperationForTaskEvent {
   final String title;
   final String descriptipions;
+  final String typeOfTask;
+  final String refKey;
 
-  const OperationForTaskPressedOK(this.title, this.descriptipions);
+  const OperationForTaskPressedOK(
+      this.title, this.descriptipions, this.typeOfTask, this.refKey);
 }
 
 class DeleteTask extends OperationForTaskEvent {

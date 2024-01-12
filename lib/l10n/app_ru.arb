@@ -13,6 +13,7 @@
   "clearBox": "Удалить все",
   "changeLocale": "Изменить язык",
   "changeTheme": "Изменить тему",
-  "status": "Статус"
+  "status": "Статус",
+  "fullName": "Имя и фамилия"
 
 }

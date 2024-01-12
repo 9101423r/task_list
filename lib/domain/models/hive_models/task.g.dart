@@ -24,13 +24,15 @@ class TaskAdapter extends TypeAdapter<Task> {
       hours: fields[5] as double,
       temporaryUUID: fields[6] as String,
       comments: (fields[7] as List).cast<String>(),
+      refKey: fields[8] as String,
+      typeTask: fields[9] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Task obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
@@ -44,7 +46,11 @@ class TaskAdapter extends TypeAdapter<Task> {
       ..writeByte(6)
       ..write(obj.temporaryUUID)
       ..writeByte(7)
-      ..write(obj.comments);
+      ..write(obj.comments)
+      ..writeByte(8)
+      ..write(obj.refKey)
+      ..writeByte(9)
+      ..write(obj.typeTask);
   }
 
   @override

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:task_list/domain/api/list_compain.dart';
 import 'package:task_list/domain/auth/auth_data.dart';
 import 'package:task_list/domain/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/user_model.dart';
@@ -21,10 +20,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       } catch (e) {
         emit(const SignUpFailure());
       }
-    });
-    on<GetListCompanyName>((event, emit) async {
-      late List<String> listCompany;
-      listCompany = await ApiFromServer().getListCompany();
     });
   }
 }

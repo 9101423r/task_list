@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:task_list/domain/api/list_compain.dart';
+import 'package:task_list/data/api/api_from_1c.dart';
 import 'package:task_list/domain/api/local_task_repository.dart';
 import 'package:task_list/domain/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
@@ -55,7 +55,9 @@ class OperationForTaskBloc
             status: 1,
             hours: 0,
             temporaryUUID: 'null',
-            comments: listStr);
+            comments: listStr,
+            refKey: event.refKey,
+            typeTask: event.typeOfTask);
         TaskRepository().addTask(newTask);
         emit(AddingTaskSuccess());
       } on Exception catch (e) {
@@ -67,7 +69,9 @@ class OperationForTaskBloc
             status: 1,
             hours: 0,
             temporaryUUID: const Uuid().v4(),
-            comments: listStr);
+            comments: listStr,
+            refKey: event.refKey,
+            typeTask: event.typeOfTask);
         TaskRepository().addTask(newTask);
       }
     }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_list/blocs/drop_down_bloc/drop_down_bloc.dart';
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:task_list/data/api/api_from_1c.dart';
+import 'package:task_list/screens/general_widgets/company_name_drop_down.dart';
 
 class MyAlertWidget extends StatefulWidget {
   const MyAlertWidget({super.key});
@@ -13,11 +16,19 @@ class MyAlertWidget extends StatefulWidget {
 class _MyAlertWidgetState extends State<MyAlertWidget> {
   TextEditingController taskTitleController = TextEditingController();
   TextEditingController taskDescriptionController = TextEditingController();
+  final Future<List<dynamic>> getFutureList =
+      ApiFromServer().getTypeTaskFromServer();
 
   void clearController() {
     taskTitleController.clear();
     taskDescriptionController.clear();
   }
+
+  final Future<List<dynamic>> getTypeAndRefKey =
+      ApiFromServer().getTypeTaskFromServer();
+
+  String refKey = '';
+  late String typeOfTask;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +47,20 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
                   controller: taskDescriptionController,
                   maxLines: 2,
                   decoration:
-                      const InputDecoration(hintText: 'Task description'))
+                      const InputDecoration(hintText: 'Task description')),
+              BlocProvider(
+                create: (context) => DropDownBloc(),
+                child: Expanded(
+                    child: DropDownWithRefKeyAndChangeValue(
+                  onRefKeyGetIt: (String value) {
+                    refKey = value;
+                  },
+                  getFutureList: getFutureList,
+                  onDropDownValueChoose: (String newValue) {
+                    typeOfTask = newValue;
+                  },
+                )),
+              )
             ]),
           ),
           actions: [
@@ -44,9 +68,10 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
                 onPressed: () {
                   String title = taskTitleController.text;
                   String taskDescription = taskDescriptionController.text;
-                  context
-                      .read<OperationForTaskBloc>()
-                      .add(OperationForTaskPressedOK(title, taskDescription));
+
+                  context.read<OperationForTaskBloc>().add(
+                      OperationForTaskPressedOK(
+                          title, taskDescription, typeOfTask, refKey));
                   Navigator.pop(context);
                   clearController();
                 },
