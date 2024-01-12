@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:task_list/data/api/api_from_1c.dart';
-import 'package:task_list/domain/api/local_task_repository.dart';
+import 'package:task_list/domain/repository/local_task_repository.dart';
 import 'package:task_list/domain/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 import 'package:uuid/uuid.dart';

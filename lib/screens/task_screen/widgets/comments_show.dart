@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:task_list/data/hive_local_storage/comment_hive_local_storage.dart';
-import 'package:task_list/domain/api/local_task_comment_repositoryt.dart';
+import 'package:task_list/domain/repository/local_task_comment_repositoryt.dart';
 
 import 'package:task_list/domain/models/hive_models/comments_model.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
