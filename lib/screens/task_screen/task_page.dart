@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
-import 'package:task_list/domain/repository/local_task_comment_repositoryt.dart';
-import 'package:task_list/domain/models/hive_models/comments_model.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 
 import 'package:task_list/screens/task_screen/widgets/alert_dialog.dart';
@@ -21,19 +18,9 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  late final LocalCommentRepository commentRepository;
-  late final box = Hive.box<Comment>('commentBox');
 
-  @override
-  void initState() {
-    super.initState();
-    commentRepository = LocalCommentRepository(task: widget.task);
-    box.watch().listen((event) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +34,11 @@ class _TaskPageState extends State<TaskPage> {
   Column bodyMain(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       JustText(stringType: 'Name', stringSpec: widget.task.title),
-      Divider(),
+      const Divider(),
       JustText(stringType: 'Type', stringSpec: widget.task.typeTask),
-      Divider(),
-      JustText(stringType: 'RefKey', stringSpec: widget.task.refKey),
-      Divider(),
+      const Divider(),
+      JustText(stringType: 'NumberID', stringSpec: widget.task.id.toString()),
+      const Divider(),
       JustText(
           stringType: 'Descriptions', stringSpec: widget.task.descriptions),
       BlocProvider(
@@ -62,9 +49,9 @@ class _TaskPageState extends State<TaskPage> {
       commentsRow(context),
       const Divider(),
       CommentsListView(
-          commentRepository: commentRepository,
+        
           task: widget.task,
-          boxComments: box),
+          ),
     ]);
   }
 

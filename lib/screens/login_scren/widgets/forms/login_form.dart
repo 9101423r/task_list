@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:task_list/blocs/drop_down_bloc/drop_down_bloc.dart';
 import 'package:task_list/blocs/sign_up_bloc/sign_up_bloc.dart';
+
 import 'package:task_list/constants/app_text_styles.dart';
 import 'package:task_list/constants/validator.dart';
+
 import 'package:task_list/data/api/api_from_1c.dart';
 import 'package:task_list/domain/models/user_model.dart';
+
 import 'package:task_list/screens/general_widgets/company_name_drop_down.dart';
 import 'package:task_list/screens/login_scren/widgets/text_fields/email_text_field.dart';
 import 'package:task_list/screens/login_scren/widgets/text_fields/general_text_field.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'package:task_list/screens/login_scren/widgets/text_fields/password_text_field.dart';
 
 class LoginForm extends StatefulWidget {
@@ -89,7 +91,6 @@ class _LoginFormState extends State<LoginForm> {
         width: MediaQuery.of(context).size.width * 0.5,
         child: TextButton(
           onPressed: () {
-            print("refKey:$refKey");
             if (formKey.currentState!.validate()) {
               MyUser myUser = MyUser.empty;
               myUser = myUser.copyWith(
@@ -100,7 +101,7 @@ class _LoginFormState extends State<LoginForm> {
                   phoneNumber:
                       Validator().clearPhoneNumber(phoneNumberController.text),
                   refKey: refKey);
-              print("refKey:$refKey");
+
               context
                   .read<SignUpBloc>()
                   .add(SignUpRequired(myUser, passwordController.text));

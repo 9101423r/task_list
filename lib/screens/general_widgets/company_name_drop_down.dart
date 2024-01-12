@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/drop_down_bloc/drop_down_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DropDownWithRefKeyAndChangeValue extends StatelessWidget {
   final Future<List<dynamic>> getFutureList;
@@ -24,12 +25,10 @@ class DropDownWithRefKeyAndChangeValue extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
-              return const Text('Ошибка загрузки данных');
-            } else {
+              return Text(AppLocalizations.of(context)!.refreshPageText);
+            } else { // TODO
               List<String> refKeyList = snapshot.data![0];
               List<String> companyName = snapshot.data![1];
-              print('refKeyList: $refKeyList');
-              print('companyName: $companyName');
               String selectedValue = state.selectedValue;
               firstTime
                   ? {
@@ -43,6 +42,7 @@ class DropDownWithRefKeyAndChangeValue extends StatelessWidget {
                     ? companyName.first
                     : selectedValue,
                 isExpanded: true,
+                underline: const Divider(),
                 items: companyName.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,

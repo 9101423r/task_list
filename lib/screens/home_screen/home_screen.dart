@@ -7,14 +7,9 @@ import 'package:task_list/screens/home_screen/widgets/alert_dialog.dart';
 import 'package:task_list/screens/home_screen/widgets/elements/pop_up_menu_button.dart';
 import 'package:task_list/screens/home_screen/widgets/home_body.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(

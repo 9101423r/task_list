@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
+import 'package:task_list/constants/validator.dart';
+import 'package:task_list/domain/models/user_model.dart';
 part 'task.g.dart';
 
 @HiveType(typeId: 1)
@@ -34,16 +38,53 @@ class Task {
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-        id: json['id'],
-        title: json['title'],
-        descriptions: json['descriptions'],
-        status: json['status'],
-        hours: json['hours'] as double,
-        temporaryUUID: json['temporaryUUID'],
+        id:int.parse(json['Number']),
+        title: json['КраткоеОписание'],
+        descriptions: json['ПодробноеОписание'],
+        status: 1,
+        hours: ( json['ЗатраченноеВремя']).toDouble() ,
+        temporaryUUID: 'null',
         comments: List<String>.from(
-          json['comments'] ?? [],
+          json['Комментарии'] ?? [],
         ),
-        refKey: json['Ref_Key'],
-        typeTask: json['Description']);
+        refKey: json['Исполнитель_Key'],
+        typeTask: 'TypeTask');
+  }
+
+  Map toMap(String userRefKey) {
+    DateTime now = DateTime.now();
+    var map = <String, dynamic>{};
+    map["DeletionMark"] = false;
+    map["Date"] = now.toString();
+    map["Posted"] = true;
+    map["Клиент_Key"] = userRefKey;
+    map["ТипЗадачи_Key"] = refKey;
+    map["КраткоеОписание"] = title;
+    map["ПодробноеОписание"] = descriptions;
+    map["Создатель_Key"] = "963be8af-302d-11ee-8c7b-000c292a705c";
+    map["Исполнитель_Key"] = "89a6a0aa-c7ac-11ec-9a7b-1078d2d60194";
+    map["Срок"] = now.toString();
+    map["Наблюдатель_Key"] = "00000000-0000-0000-0000-000000000000";
+    map["Приоритет"] = "Средний";
+    map["ДатаФактическая"] = "0001-01-01T00:00:00";
+    map["ДатаИзменения"] = now.toString();
+    map["ЧасыПереработки"] = 0;
+    map["Статус"] = "Открыта";
+    map["ЗатраченноеВремя"] = hours;
+    map["Штучная"] = false;
+    map["Часовая"] = false;
+    map["Самостоятельность"] = "0";
+    map["КачествоВыполненияРабот"] = "0";
+    map["Вовлеченность"] = "0";
+    map["ДатаЗакрытия"] = "0001-01-01T00:00:00";
+    map["СверухрочныеРаботы"] = false;
+    map["ЦенаШтучныхРабот"] = 0;
+    map["ДоговорКлиента_Key"] = "00000000-0000-0000-0000-000000000000";
+
+    map["Комментарии"] = comments;
+    map["ИспользуемыеМатериалы"] = [];
+    map["ЧекЛист"] = [];
+
+    return map;
   }
 }

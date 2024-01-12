@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:task_list/data/hive_local_storage/comment_hive_local_storage.dart';
-import 'package:task_list/domain/repository/local_task_comment_repositoryt.dart';
 
 import 'package:task_list/domain/models/hive_models/comments_model.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
@@ -10,13 +9,13 @@ import 'package:task_list/domain/models/hive_models/task.dart';
 import 'package:task_list/screens/task_screen/widgets/comments_card.dart';
 
 class CommentsListView extends StatefulWidget {
-  final LocalCommentRepository commentRepository;
+
   final Task task;
-  final Box<Comment> boxComments;
+  
   const CommentsListView(
-      {required this.commentRepository,
+      {
       required this.task,
-      required this.boxComments,
+   
       super.key});
 
   @override

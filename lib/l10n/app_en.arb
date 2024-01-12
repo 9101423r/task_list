@@ -14,5 +14,6 @@
   "changeLocale": "Change Locale",
   "changeTheme": "Change Theme",
   "status": "Status",
-  "fullName": "Fullname"
+  "fullName": "Fullname",
+  "refreshPageText": "Please refresh the page"
 }

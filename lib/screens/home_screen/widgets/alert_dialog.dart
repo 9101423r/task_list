@@ -32,7 +32,7 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
+    return BlocBuilder<OperationForTaskBloc, OperationForTaskState>( // C FutureBuilder только онлайн будет работать
       builder: (context, state) {
         return AlertDialog(
           content: SizedBox(

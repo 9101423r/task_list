@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer' as dev;
 import 'package:dio/dio.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 class ApiFromServer {
   Future<int> getId() {
@@ -13,7 +14,7 @@ class ApiFromServer {
   final dio = Dio();
 
   Future<List<dynamic>> getListCompany() async {
-    // Возвращаю лист [Первое refKey, второе Лист из название]
+    // Возвращаю лист [Первое Лист из refKey, второе Лист из название]
     String basicAuth =
         'Basic ${base64.encode(utf8.encode('$username:$password'))}';
 
@@ -35,7 +36,6 @@ class ApiFromServer {
         result.add(contragentList[i]['Description']);
         refKeyUser.add(contragentList[i]['Ref_Key']);
       }
-      print('result: ${result}');
       return [refKeyUser, result];
     } else {
       return [];
@@ -44,7 +44,7 @@ class ApiFromServer {
 
   Future<List<dynamic>> getTypeTaskFromServer() async {
     String basicAuth =
-        'Basic ${base64.encode(utf8.encode('$username:$password'))}'; // Без late указывает ошибку
+        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
     dio.options.headers["authorization"] = basicAuth;
     late final response;
     try {
@@ -65,10 +65,35 @@ class ApiFromServer {
         result.add(typeTask[i]['Description']);
         refKeyTask.add(typeTask[i]['Ref_Key']);
       }
-      print(result);
+
       return [refKeyTask, result];
     } else {
       return [];
     }
+  }
+
+  Future<Task> postTaskForServer(Task postTask) async {
+    const postAdress =
+        'http://192.168.1.15/BaseDev/odata/standard.odata/Document_СозданиеЗаявки?\$format=json';
+    String basicAuth =
+        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+    dio.options.headers["authorization"] = basicAuth;
+
+    late final Response resultResponse;
+
+    try {
+      resultResponse = await dio.post(postAdress,
+          data: postTask.toMap('2212ad5a-abc3-11e4-8046-90e6ba1b913b'));
+      if (resultResponse.data != 0) { // 201
+        print('Result${resultResponse.data}');
+        Task task = Task.fromJson(resultResponse.data);
+        return task;
+      }
+    } on DioException catch (dioErrors) {
+      dev.log(dioErrors.toString());
+    } catch (error) {
+      dev.log('PostTaskForServer: $error');
+    }
+    return postTask;
   }
 }

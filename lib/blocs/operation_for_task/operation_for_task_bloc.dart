@@ -44,36 +44,19 @@ class OperationForTaskBloc
   Future<void> addingTask(OperationForTaskPressedOK event,
       Emitter<OperationForTaskState> emit) async {
     {
-      late Task newTask;
-      List<String> listStr = [];
-      try {
-        int id = await ApiFromServer().getId();
-        newTask = Task(
-            id: id,
-            title: event.title,
-            descriptions: event.descriptipions,
-            status: 1,
-            hours: 0,
-            temporaryUUID: 'null',
-            comments: listStr,
-            refKey: event.refKey,
-            typeTask: event.typeOfTask);
-        TaskRepository().addTask(newTask);
-        emit(AddingTaskSuccess());
-      } on Exception catch (e) {
-        // TODO
-        newTask = Task(
-            id: 0,
-            title: event.title,
-            descriptions: event.descriptipions,
-            status: 1,
-            hours: 0,
-            temporaryUUID: const Uuid().v4(),
-            comments: listStr,
-            refKey: event.refKey,
-            typeTask: event.typeOfTask);
-        TaskRepository().addTask(newTask);
-      }
+      Task newTask = Task(
+          id: 0,
+          title: event.title,
+          descriptions: event.descriptipions,
+          status: 1,
+          hours: 0,
+          temporaryUUID: 'null',
+          comments: [],
+          refKey: event.refKey,
+          typeTask: event.typeOfTask);
+
+      Task getTask = await ApiFromServer().postTaskForServer(newTask);
+      TaskRepository().addTask(getTask);
     }
   }
 }

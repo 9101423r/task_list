@@ -14,6 +14,7 @@
   "changeLocale": "Изменить язык",
   "changeTheme": "Изменить тему",
   "status": "Статус",
-  "fullName": "Имя и фамилия"
+  "fullName": "Имя и фамилия",
+  "refreshPageText": "Пожалуйста, обновите страницу"
 
 }

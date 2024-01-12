@@ -24,4 +24,15 @@ class Validator {
       mask: '+7 (###) ###-##-##',
       filter: {'#': RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy);
+
+  String customDateFormatter(DateTime dateTime) {
+    return '${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
+  }
+
+  String customPlusOneWeekDateFormatter(DateTime newDateTime) {
+    DateTime dateTime = newDateTime;
+    dateTime.add(Duration(days: 7));
+
+    return '${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
+  }
 }
