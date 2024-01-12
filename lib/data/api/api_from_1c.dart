@@ -72,7 +72,7 @@ class ApiFromServer {
     }
   }
 
-  Future<Task> postTaskForServer(Task postTask) async {
+  Future<Task> postTaskForServer(Task postTask, String companyID) async {
     const postAdress =
         'http://192.168.1.15/BaseDev/odata/standard.odata/Document_СозданиеЗаявки?\$format=json';
     String basicAuth =
@@ -82,9 +82,10 @@ class ApiFromServer {
     late final Response resultResponse;
 
     try {
-      resultResponse = await dio.post(postAdress,
-          data: postTask.toMap('2212ad5a-abc3-11e4-8046-90e6ba1b913b'));
-      if (resultResponse.data != 0) { // 201
+      resultResponse =
+          await dio.post(postAdress, data: postTask.toMap(companyID));
+      if (resultResponse.statusCode == 201) {
+        // 201
         print('Result${resultResponse.data}');
         Task task = Task.fromJson(resultResponse.data);
         return task;

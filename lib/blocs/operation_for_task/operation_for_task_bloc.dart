@@ -1,11 +1,15 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_list/data/api/api_from_1c.dart';
+
 import 'package:task_list/domain/repository/local_task_repository.dart';
 import 'package:task_list/domain/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
-import 'package:uuid/uuid.dart';
+
+import 'dart:developer' as dev;
 
 part 'operation_for_task_event.dart';
 part 'operation_for_task_state.dart';
@@ -54,8 +58,27 @@ class OperationForTaskBloc
           comments: [],
           refKey: event.refKey,
           typeTask: event.typeOfTask);
+      late String companyRefKeyID;
 
-      Task getTask = await ApiFromServer().postTaskForServer(newTask);
+      var collection = FirebaseFirestore.instance.collection('user');
+      late var docSnapshot;
+      try {
+        docSnapshot =
+            await collection.doc(FirebaseAuth.instance.currentUser!.email).get();
+
+        Map<String, dynamic> data = docSnapshot.data()!;
+
+        companyRefKeyID = data["ref_key"];
+      } on FirebaseException catch (e) {
+        dev.log(e.toString());
+        companyRefKeyID = '968b4653-12fe-11ed-b540-1078d2580ce6'; // TODO
+      } catch (e) {
+        print(e);
+        companyRefKeyID = '968b4653-12fe-11ed-b540-1078d2580ce6'; // TODO
+      }
+
+      Task getTask =
+          await ApiFromServer().postTaskForServer(newTask, companyRefKeyID);
       TaskRepository().addTask(getTask);
     }
   }
