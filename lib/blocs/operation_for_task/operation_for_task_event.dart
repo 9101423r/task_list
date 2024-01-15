@@ -36,8 +36,8 @@ class TaskTapped extends OperationForTaskEvent {
 class ClearBoxTapped extends OperationForTaskEvent {}
 
 class PageRefreshed extends OperationForTaskEvent {
-  final List<String> listIDTask;
-  const PageRefreshed({required this.listIDTask});
+  final List<Task> listTask;
+  const PageRefreshed({required this.listTask});
 }
 
 class SignOut extends OperationForTaskEvent {}

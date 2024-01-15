@@ -16,12 +16,34 @@ class OperationForTaskBloc
     extends Bloc<OperationForTaskEvent, OperationForTaskState> {
   OperationForTaskBloc({required TaskRepository taskRepository})
       : _taskRepository = taskRepository,
-        super(const OperationForTaskState()) {
+        super(OperationForTaskState()) {
     on<TaskListSubscriptionRequested>(
         (event, emit) => _onSubscriptionRequested(event, emit));
 
-    on<OperationForTaskPressedOK>(
-        (event, emit) async => addingTask(event, emit));
+    on<OperationForTaskPressedOK>((event, emit) async {
+      emit(OperationForTaskState(
+          status: TaskStatus.loading, taskList: List.of(state.taskList)));
+      Task newTask = Task(
+          id: 0,
+          title: event.title,
+          descriptions: event.descriptipions,
+          status: 'Открыта',
+          hours: 0,
+          temporaryUUID: 'null',
+          comments: [],
+          refKey: event.refKey,
+          typeTask: event.typeOfTask);
+      String companyRefKeyID = await FirebaseUserAuth().getCompainRefKey();
+
+      print("companyRefKeyID: $companyRefKeyID");
+
+      Task getTask =
+          await ApiFromServer().postTaskForServer(newTask, companyRefKeyID);
+      TaskRepository().addTask(getTask);
+      emit(OperationForTaskState(
+          status: TaskStatus.success, taskList: [getTask]));
+      print("is is printed?");
+    });
 
     on<TaskTapped>((event, emit) => taskTapped(event, emit));
 
@@ -29,7 +51,7 @@ class OperationForTaskBloc
 
     on<PageRefreshed>((event, emit) async {
       // TODO
-      await pageRefreshed(event);
+      await pageRefreshed(event, emit);
     });
 
     on<SignOut>((event, emit) => FirebaseUserAuth().logOut());
@@ -55,36 +77,15 @@ class OperationForTaskBloc
     );
   }
 
-  Future<void> pageRefreshed(PageRefreshed event) async {
-    print('event.listIDTask.toString(): ${event.listIDTask.toString()}');
+  Future<void> pageRefreshed(
+      PageRefreshed event, Emitter<OperationForTaskState> emit) async {
+    emit(OperationForTaskState(
+        status: TaskStatus.loading, taskList: List.of(state.taskList)));
+    print('event.listIDTask.toString(): ${event.listTask.toString()}');
     List<Task> getValuesFromServer =
-        await ApiFromServer().getTasksFromServer(event.listIDTask);
-  }
-
-  Future<void> addingTask(OperationForTaskPressedOK event,
-      Emitter<OperationForTaskState> emit) async {
-    {
-      Task newTask = Task(
-          id: 0,
-          title: event.title,
-          descriptions: event.descriptipions,
-          status: 'Открыта',
-          hours: 0,
-          temporaryUUID: 'null',
-          comments: [],
-          refKey: event.refKey,
-          typeTask: event.typeOfTask);
-      String companyRefKeyID = await FirebaseUserAuth().getCompainRefKey();
-
-      print("companyRefKeyID: $companyRefKeyID");
-
-      Task getTask =
-          await ApiFromServer().postTaskForServer(newTask, companyRefKeyID);
-      TaskRepository().addTask(getTask);
-      emit(OperationForTaskState(
-          status: TaskStatus.loading,
-          taskList: [getTask]));
-    }
+        await ApiFromServer().getTasksFromServer(event.listTask);
+    emit(OperationForTaskState(
+        status: TaskStatus.success, taskList: getValuesFromServer));
   }
 
   void taskTapped(TaskTapped event, Emitter<OperationForTaskState> emit) {

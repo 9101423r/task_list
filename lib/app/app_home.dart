@@ -21,7 +21,8 @@ class AppHome extends StatelessWidget {
           if (snapshot.hasData) {
             return BlocProvider(
               create: (context) =>
-                  OperationForTaskBloc(taskRepository: taskRepository),
+                  OperationForTaskBloc(taskRepository: taskRepository)
+                    ..add(const TaskListSubscriptionRequested()),
               child: const HomeScreen(),
             );
           } else {

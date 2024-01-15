@@ -32,11 +32,18 @@ class HomeScreen extends StatelessWidget {
                   return const Center(child: Text('JUST TEXT'));
                 }
               }
-              return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return TaskCard(task: state.taskList[index]);
-                  },
-                  itemCount: state.taskList.length);
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context
+                      .read<OperationForTaskBloc>()
+                      .add(PageRefreshed(listTask: state.taskList));
+                },
+                child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return TaskCard(task: state.taskList[index]);
+                    },
+                    itemCount: state.taskList.length),
+              );
             },
           ),
           floatingActionButton: floatingActionButton(context),
