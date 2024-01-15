@@ -26,13 +26,23 @@ class Validator {
       type: MaskAutoCompletionType.lazy);
 
   String customDateFormatter(DateTime dateTime) {
-    return '${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
+    String month  = dateTime.month<10 ? '0${dateTime.month}' : '${dateTime.month}';
+    String day = dateTime.day<10 ? '0${dateTime.day}' : '${dateTime.day}';
+    String hour = dateTime.hour<10 ? '0${dateTime.hour}' : '${dateTime.hour}';
+    String minute = dateTime.minute < 10 ? '0${dateTime.minute}': '${dateTime.minute}';
+    String second = dateTime.second < 10 ? '0${dateTime.second}' : '${dateTime.second}';
+
+    return '${dateTime.year}-$month-${day}T$hour:$minute:$second';
   }
 
-  String customPlusOneWeekDateFormatter(DateTime newDateTime) {
-    DateTime dateTime = newDateTime;
-    dateTime.add(Duration(days: 7));
+  String customPlusOneWeekDateFormatter(DateTime dateTime) {
+    dateTime.add(const Duration(days: 7));
+    String month  = dateTime.month<10 ? '0${dateTime.month}' : '${dateTime.month}';
+    String day = dateTime.day<10 ? '0${dateTime.day}' : '${dateTime.day}';
+    String hour = dateTime.hour<10 ? '0${dateTime.hour}' : '${dateTime.hour}';
+    String minute = dateTime.minute < 10 ? '0${dateTime.minute}': '${dateTime.minute}';
+    String second = dateTime.second < 10 ? '0${dateTime.second}' : '${dateTime.second}';
 
-    return '${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
+    return '${dateTime.year}-$month-${day}T$hour:$minute:$second';
   }
 }

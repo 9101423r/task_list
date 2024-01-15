@@ -21,26 +21,35 @@ class _HomeBodyState extends State<HomeBody> {
     taskStreamController = TaskRepository().tasksStream;
   }
 
+  List<String> listIdTask = [];
+
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<OperationForTaskBloc>().add(PageRefreshed());
-      },
-      child: StreamBuilder<List<Task>>(
-          stream: taskStreamController,
-          initialData: TaskRepository().listTask,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
+    return StreamBuilder<List<Task>>(
+        stream: taskStreamController,
+        initialData: TaskRepository().listTask,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            listIdTask = snapshot.data!
+                .where((element) => element.temporaryUUID == 'null')
+                .map((task) => task.id.toString())
+                .toList();
+            print('ListIDTask: $listIdTask');
+            return RefreshIndicator(
+              onRefresh: () async {
+                context
+                    .read<OperationForTaskBloc>()
+                    .add(PageRefreshed(listIDTask: listIdTask));
+              },
+              child: ListView.builder(
                   itemBuilder: (context, index) {
                     return TaskCard(task: snapshot.data!.toList()[index]);
                   },
-                  itemCount: snapshot.data!.toList().length);
-            } else {
-              return const Center(child: Text('JUST TEXT'));
-            }
-          }),
-    );
+                  itemCount: snapshot.data!.toList().length),
+            );
+          } else {
+            return const Center(child: Text('JUST TEXT'));
+          }
+        });
   }
 }

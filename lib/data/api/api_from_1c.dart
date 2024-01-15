@@ -90,11 +90,45 @@ class ApiFromServer {
         Task task = Task.fromJson(resultResponse.data);
         return task;
       }
-    } on DioException catch (dioErrors) {
+    } on DioException catch (dioErrors) { // TODO show snackbar if POST request failure 
       dev.log(dioErrors.toString());
     } catch (error) {
       dev.log('PostTaskForServer: $error');
     }
     return postTask;
+  }
+
+  Future<List<Task>> getTasksFromServer(List<String> idList) async {
+    const url =
+        'http://192.168.1.15/BaseDev/odata/standard.odata/Document_СозданиеЗаявки?\$format=application/json&\$filter=';
+
+    var newUrl = url + idList.map((e) => "Number eq $e").join(' or ');
+
+    String basicAuth =
+        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+    dio.options.headers["authorization"] = basicAuth;
+
+    late final Response resultResponse;
+
+    try {
+      resultResponse = await dio.get(newUrl);
+      if (resultResponse.statusCode == 200) {
+        if (resultResponse.data != null){
+          var resultList = <Task>[];
+          var result = resultResponse.data['value'];
+          for (var i in result){
+            print('TASK FROM SERVER STATUS: ${Task.fromJson(i).status}');
+            resultList.add(Task.fromJson(i));
+          }
+          return resultList;
+        }
+        return [];
+      }
+    } on DioException catch (dioErrors) {
+      dev.log(dioErrors.toString());
+    } catch (error) {
+      dev.log('PostTaskForServer: $error');
+    }
+    return [];
   }
 }

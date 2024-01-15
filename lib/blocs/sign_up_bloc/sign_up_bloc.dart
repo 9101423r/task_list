@@ -12,8 +12,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<SignUpRequired>((event, emit) async {
       emit(const SignUpProcess());
       try {
-        Future.delayed(const Duration(seconds: 5));
-        const Duration(seconds: 5);
         MyUser user = await Authentication().signUp(event.user, event.password);
         await FirebaseUserAuth().createUser(user);
         emit(const SignUpSuccess());

@@ -7,7 +7,6 @@ import 'package:task_list/screens/task_screen/widgets/alert_dialog.dart';
 import 'package:task_list/screens/task_screen/widgets/comments_show.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:task_list/screens/task_screen/widgets/just_text.dart';
-import 'package:task_list/screens/task_screen/widgets/status_choise.dart';
 
 class TaskPage extends StatefulWidget {
   final Task task;
@@ -18,10 +17,6 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-
-
- 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,24 +29,17 @@ class _TaskPageState extends State<TaskPage> {
   Column bodyMain(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       JustText(stringType: 'Name', stringSpec: widget.task.title),
-      const Divider(),
       JustText(stringType: 'Type', stringSpec: widget.task.typeTask),
-      const Divider(),
       JustText(stringType: 'NumberID', stringSpec: widget.task.id.toString()),
-      const Divider(),
       JustText(
           stringType: 'Descriptions', stringSpec: widget.task.descriptions),
-      BlocProvider(
-        create: (context) => EditTaskBloc(),
-        child: StatusChoise(task: widget.task),
-      ),
+      JustText(stringType: 'Status', stringSpec: widget.task.status),
       JustText(stringType: 'Hour', stringSpec: widget.task.hours.toString()),
       commentsRow(context),
       const Divider(),
       CommentsListView(
-        
-          task: widget.task,
-          ),
+        task: widget.task,
+      ),
     ]);
   }
 

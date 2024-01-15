@@ -9,9 +9,12 @@ class JustText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      '$stringType : $stringSpec',
-      style: AppTextStyles.h2,
-    );
+    return Column(children: [
+      Text(
+        '$stringType : $stringSpec',
+        style: AppTextStyles.h2,
+      ),
+      const Divider()
+    ]);
   }
 }

@@ -11,15 +11,11 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc() : super(SignInBlocInitial()) {
     on<SignInRequired>((event, emit)async {
        emit(const SignInProcess());
-       await Authentication().login(event.email,event.password) ?
-        emit(const SignInSuccess()) :
-       emit(const SignInFailure());
-       
-      
+       String result = await Authentication().login(event.email,event.password) ;
+       result == 'Success' ?
+       emit(const SignInSuccess()) :
+       emit(SignInFailure(firebaseException: result));
     });
-    on<SwipeWithAnotherPage>(((event, emit) {
-    Navigator.pop(event.context);
-     }));
-  
+
   }
 }

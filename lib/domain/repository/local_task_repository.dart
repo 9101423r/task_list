@@ -24,11 +24,14 @@ class TaskRepository {
     _tasksController = StreamController<List<Task>>.broadcast();
     _loadTasks();
     getListTaskLikeInitialData();
+    updateValues([]);
   }
 
   void getloadTasks() {
     _loadTasks();
   }
+
+  void updateValues(List<Task> getTasks) => _tasksController.sink.add(getTasks);
 
   void _loadTasks() {
     _taskBox.watch().listen((event) {

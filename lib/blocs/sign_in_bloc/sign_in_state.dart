@@ -14,7 +14,8 @@ class SignInSuccess extends SignInState {
 }
 
 class SignInFailure extends SignInState {
-  const SignInFailure();
+  final String firebaseException;
+  const SignInFailure({required this.firebaseException});
 }
 
 class SignInProcess extends SignInState {

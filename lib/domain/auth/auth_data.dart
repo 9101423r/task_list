@@ -4,15 +4,15 @@ import 'dart:developer' as dev;
 import 'package:task_list/domain/models/user_model.dart';
 
 class Authentication {
-  Future<bool> login(String email, String password) async {
+  Future<String> login(String email, String password) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.trim(), password: password.trim());
-      return true;
+      return 'Success';
     } on FirebaseAuthException catch (exceptions) {
       dev.log(exceptions.toString());
 
-      return false;
+      return exceptions.toString();
     }
   }
 

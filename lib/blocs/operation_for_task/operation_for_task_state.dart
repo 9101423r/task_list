@@ -9,9 +9,6 @@ sealed class OperationForTaskState extends Equatable {
 
 final class AddingTaskInitial extends OperationForTaskState {}
 
-class AddingTaskSuccess extends OperationForTaskState {}
-
-class TaskLoading extends OperationForTaskState {}
 
 class TaskLoaded extends OperationForTaskState {
   final List<Task> tasks;
@@ -21,10 +18,7 @@ class TaskLoaded extends OperationForTaskState {
   List<Object> get props => [tasks];
 }
 
-class TaskError extends OperationForTaskState {
-  final String message;
 
-  const TaskError({required this.message});
-}
 
 class OpenTask extends OperationForTaskState {}
+

@@ -37,27 +37,29 @@ class DropDownWithRefKeyAndChangeValue extends StatelessWidget {
                     }
                   : {};
 
-              return DropdownButton<String>(
-                value: state.selectedValue.isEmpty
-                    ? companyName.first
-                    : selectedValue,
-                isExpanded: true,
-                underline: const Divider(),
-                items: companyName.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  if (newValue != null && newValue != state.selectedValue) {
-                    dropdownBloc.add(ValueWasChange(newValue: newValue));
-                    firstTime = false;
-                    onRefKeyGetIt(refKeyList[companyName
-                        .indexWhere((element) => element == newValue)]);
-                    onDropDownValueChoose(newValue);
-                  }
-                },
+              return DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: state.selectedValue.isEmpty
+                      ? companyName.first
+                      : selectedValue,
+                  isExpanded: true,
+                  underline: const Divider(),
+                  items: companyName.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    if (newValue != null && newValue != state.selectedValue) {
+                      dropdownBloc.add(ValueWasChange(newValue: newValue));
+                      firstTime = false;
+                      onRefKeyGetIt(refKeyList[companyName
+                          .indexWhere((element) => element == newValue)]);
+                      onDropDownValueChoose(newValue);
+                    }
+                  },
+                ),
               );
             }
           },

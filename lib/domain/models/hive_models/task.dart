@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:hive/hive.dart';
 import 'package:task_list/constants/validator.dart';
-import 'package:task_list/domain/models/user_model.dart';
+
 part 'task.g.dart';
 
 @HiveType(typeId: 1)
@@ -14,7 +12,7 @@ class Task {
   @HiveField(3)
   String descriptions;
   @HiveField(4)
-  int status;
+  String status;
   @HiveField(5)
   double hours;
   @HiveField(6)
@@ -38,24 +36,24 @@ class Task {
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-        id:int.parse(json['Number']),
+        id: int.parse(json['Number']),
         title: json['КраткоеОписание'],
         descriptions: json['ПодробноеОписание'],
-        status: 1,
-        hours: ( json['ЗатраченноеВремя']).toDouble() ,
+        status: json['Статус'],
+        hours: (json['ЗатраченноеВремя']).toDouble(),
         temporaryUUID: 'null',
         comments: List<String>.from(
           json['Комментарии'] ?? [],
         ),
         refKey: json['Исполнитель_Key'],
-        typeTask: 'TypeTask');
+        typeTask: json['ТипЗадачи_Key']);
   }
 
   Map toMap(String userRefKey) {
     DateTime now = DateTime.now();
     var map = <String, dynamic>{};
     map["DeletionMark"] = false;
-    map["Date"] = now.toString();
+    map["Date"] = Validator().customDateFormatter(now);
     map["Posted"] = true;
     map["Клиент_Key"] = userRefKey;
     map["ТипЗадачи_Key"] = refKey;
@@ -63,13 +61,13 @@ class Task {
     map["ПодробноеОписание"] = descriptions;
     map["Создатель_Key"] = "963be8af-302d-11ee-8c7b-000c292a705c";
     map["Исполнитель_Key"] = "89a6a0aa-c7ac-11ec-9a7b-1078d2d60194";
-    map["Срок"] = now.toString();
+    map["Срок"] = Validator().customPlusOneWeekDateFormatter(now);
     map["Наблюдатель_Key"] = "00000000-0000-0000-0000-000000000000";
     map["Приоритет"] = "Средний";
     map["ДатаФактическая"] = "0001-01-01T00:00:00";
-    map["ДатаИзменения"] = now.toString();
+    map["ДатаИзменения"] = Validator().customPlusOneWeekDateFormatter(now);
     map["ЧасыПереработки"] = 0;
-    map["Статус"] = "Открыта";
+    map["Статус"] = status;
     map["ЗатраченноеВремя"] = hours;
     map["Штучная"] = false;
     map["Часовая"] = false;
