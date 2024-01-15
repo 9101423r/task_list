@@ -42,6 +42,6 @@ class _MyAppViewState extends State<MyAppView> {
           }
           return null;
         },
-        home: const AppHome());
+        home: AppHome());
   }
 }

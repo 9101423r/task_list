@@ -7,6 +7,10 @@ sealed class OperationForTaskEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class TaskListSubscriptionRequested extends OperationForTaskEvent {
+  const TaskListSubscriptionRequested();
+}
+
 class OperationForTaskPressedOK extends OperationForTaskEvent {
   final String title;
   final String descriptipions;

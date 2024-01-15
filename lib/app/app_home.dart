@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
 import 'package:task_list/blocs/sign_or_login/sign_or_login_bloc.dart';
+import 'package:task_list/domain/repository/local_task_repository.dart';
 
 import 'package:task_list/screens/home_screen/home_screen.dart';
 import 'package:task_list/screens/login_scren/login_screen.dart';
 
 class AppHome extends StatelessWidget {
-  const AppHome({super.key});
+  TaskRepository taskRepository = TaskRepository();
+  AppHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +20,12 @@ class AppHome extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return BlocProvider(
-              create: (context) => OperationForTaskBloc(),
+              create: (context) =>
+                  OperationForTaskBloc(taskRepository: taskRepository),
               child: const HomeScreen(),
             );
           } else {
-            return  BlocProvider(
+            return BlocProvider(
               create: (context) => SignOrLoginBloc(),
               child: const LoginScreen(),
             );

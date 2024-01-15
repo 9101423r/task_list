@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
-import 'package:task_list/domain/repository/local_task_repository.dart';
-import 'package:task_list/domain/models/hive_models/task.dart';
 
 import 'package:task_list/screens/home_screen/widgets/elements/task_card.dart';
 
@@ -14,42 +12,52 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  late Stream<List<Task>> taskStreamController;
-  @override
-  void initState() {
-    super.initState();
-    taskStreamController = TaskRepository().tasksStream;
-  }
-
   List<String> listIdTask = [];
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Task>>(
-        stream: taskStreamController,
-        initialData: TaskRepository().listTask,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            listIdTask = snapshot.data!
-                .where((element) => element.temporaryUUID == 'null')
-                .map((task) => task.id.toString())
-                .toList();
-            print('ListIDTask: $listIdTask');
-            return RefreshIndicator(
-              onRefresh: () async {
-                context
-                    .read<OperationForTaskBloc>()
-                    .add(PageRefreshed(listIDTask: listIdTask));
-              },
-              child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return TaskCard(task: snapshot.data!.toList()[index]);
-                  },
-                  itemCount: snapshot.data!.toList().length),
-            );
-          } else {
-            return const Center(child: Text('JUST TEXT'));
-          }
-        });
+    return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
+        builder: (context, state) {
+      if (state.taskList.isEmpty) {
+        if (state.status == TaskStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state.status != TaskStatus.success) {
+          return const SizedBox();
+        } else {
+          return const Center(child: Text('JUST TEXT'));
+        }
+      }
+
+      return ListView.builder(
+          itemBuilder: (context, index) {
+            return TaskCard(task: state.taskList[index]);
+          },
+          itemCount: state.taskList.length);
+
+      // if (state.taskList.isEmpty) {
+      //   listIdTask = snapshot.data!
+      //       .where((element) => element.temporaryUUID == 'null')
+      //       .map((task) => task.id.toString())
+      //       .toList();
+      //   print('ListIDTask: $listIdTask');
+      //   return RefreshIndicator(
+      //     onRefresh: () async {
+      //       context
+      //           .read<OperationForTaskBloc>()
+      //           .add(PageRefreshed(listIDTask: listIdTask));
+      //     },
+      //     child:
+      // ListView.builder(
+      //         itemBuilder: (context, index) {
+      //           return TaskCard(task: snapshot.data!.toList()[index]);
+      //         },
+      //         itemCount: snapshot.data!.toList().length),
+      //   );
+      // } else {
+      //   return const Center(child: Text('JUST TEXT'));
+      // }
+    });
   }
 }

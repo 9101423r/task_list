@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
+import 'package:task_list/domain/repository/local_task_repository.dart';
 
 import 'package:task_list/screens/home_screen/widgets/alert_dialog.dart';
 import 'package:task_list/screens/home_screen/widgets/elements/pop_up_menu_button.dart';
-import 'package:task_list/screens/home_screen/widgets/home_body.dart';
+import 'package:task_list/screens/home_screen/widgets/elements/task_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -18,7 +19,26 @@ class HomeScreen extends StatelessWidget {
           appBar: AppBar(
               leading: const Text('TaskList'),
               actions: const [PopUpMenuButton()]),
-          body: const HomeBody(),
+          body: BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
+            builder: (context, state) {
+              if (state.taskList.isEmpty) {
+                if (state.status == TaskStatus.loading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state.status != TaskStatus.success) {
+                  return const SizedBox();
+                } else {
+                  return const Center(child: Text('JUST TEXT'));
+                }
+              }
+              return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return TaskCard(task: state.taskList[index]);
+                  },
+                  itemCount: state.taskList.length);
+            },
+          ),
           floatingActionButton: floatingActionButton(context),
         );
       },
@@ -32,7 +52,8 @@ class HomeScreen extends StatelessWidget {
             context: context,
             builder: (context) {
               return BlocProvider(
-                create: (context) => OperationForTaskBloc(),
+                create: (context) =>
+                    OperationForTaskBloc(taskRepository: TaskRepository()),
                 child: const MyAlertWidget(),
               );
             });

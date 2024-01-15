@@ -11,32 +11,21 @@ class TaskRepository {
 
   Stream<List<Task>> get tasksStream => _tasksController.stream;
 
-  List<Task> listTask = [];
 
-  List<Task> getListTaskLikeInitialData() {
-    {
-      listTask = _taskBox.values.toList();
-      return listTask;
-    }
-  }
 
   TaskRepository() {
     _tasksController = StreamController<List<Task>>.broadcast();
     _loadTasks();
-    getListTaskLikeInitialData();
-    updateValues([]);
+    
   }
 
-  void getloadTasks() {
-    _loadTasks();
-  }
+ 
 
-  void updateValues(List<Task> getTasks) => _tasksController.sink.add(getTasks);
-
+  
   void _loadTasks() {
-    _taskBox.watch().listen((event) {
-      _tasksController.add(_taskBox.values.toList());
-    });
+    // _taskBox.watch().listen((event) {
+    //   _tasksController.add(_taskBox.values.toList());
+    // });
   }
 
   void addTask(Task task) async {
