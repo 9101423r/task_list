@@ -8,10 +8,10 @@ class CommentHiveLocalStorage {
   String boxName = 'commentBox';
   late final box = Hive.box<Comment>(boxName);
 
-  void addComment(Task task, String string) async {
-    String id = DateTime.now().toString();
-    TaskHiveLocalStorage().saveCommentId(task, id);
-    await box.put(id, Comment(id: id, descriptions: string));
+  void addComment(Task task, Comment comment) async {
+
+    TaskHiveLocalStorage().saveCommentId(task, comment);
+    await box.put(comment.timeLikeID, comment);
   }
 
   Box<Comment> refreshBox() {

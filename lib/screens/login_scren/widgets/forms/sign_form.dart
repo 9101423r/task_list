@@ -26,7 +26,6 @@ class _SignFormState extends State<SignForm> {
     return BlocListener<SignInBloc,SignInState>(
       listener:(BuildContext context,SignInState state) {
         if(state is SignInFailure){
-          print('state.firebaseException:${state.firebaseException}');
           ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(state.firebaseException)));
         }

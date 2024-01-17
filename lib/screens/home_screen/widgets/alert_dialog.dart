@@ -15,7 +15,9 @@ class MyAlertWidget extends StatefulWidget {
 
 class _MyAlertWidgetState extends State<MyAlertWidget> {
   TextEditingController taskTitleController = TextEditingController();
+
   TextEditingController taskDescriptionController = TextEditingController();
+
   final Future<List<dynamic>> getFutureList =
       ApiFromServer().getTypeTaskFromServer();
 
@@ -28,11 +30,13 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
       ApiFromServer().getTypeTaskFromServer();
 
   String refKey = '';
+
   late String typeOfTask;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OperationForTaskBloc, OperationForTaskState>( // C FutureBuilder только онлайн будет работать
+    return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
+      // C FutureBuilder только онлайн будет работать
       builder: (context, state) {
         return AlertDialog(
           content: SizedBox(
@@ -71,8 +75,10 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
 
                   context.read<OperationForTaskBloc>().add(
                       OperationForTaskPressedOK(
-                          title, taskDescription, typeOfTask, refKey));
-                  Navigator.pop(context);
+                          title, taskDescription, refKey));
+                  print('Выбранный refKey :$refKey');
+                  Navigator.pop(
+                      context); // RefKey ключевое представление самого типа задачи
                   clearController();
                 },
                 child: Text(AppLocalizations.of(context)!.addButton)),

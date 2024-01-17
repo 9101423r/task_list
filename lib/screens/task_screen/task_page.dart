@@ -8,6 +8,8 @@ import 'package:task_list/screens/task_screen/widgets/comments_show.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:task_list/screens/task_screen/widgets/just_text.dart';
 
+import '../../data/hive_local_storage/importan_fields_hive_ld.dart';
+
 class TaskPage extends StatefulWidget {
   final Task task;
   const TaskPage({required this.task, super.key});
@@ -29,7 +31,17 @@ class _TaskPageState extends State<TaskPage> {
   Column bodyMain(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       JustText(stringType: 'Name', stringSpec: widget.task.title),
-      JustText(stringType: 'Type', stringSpec: widget.task.typeTask),
+      JustText(
+          stringType: 'Type',
+          stringSpec: ImportantFieldsLocalStorage()
+              .box
+              .values
+              .first
+              .typeTaskAndRefKey
+              .entries
+              .firstWhere((entry) => entry.key == widget.task.refKey)
+              .value
+              .toString()),
       JustText(stringType: 'NumberID', stringSpec: widget.task.id.toString()),
       JustText(
           stringType: 'Descriptions', stringSpec: widget.task.descriptions),

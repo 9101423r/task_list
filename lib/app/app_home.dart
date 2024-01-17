@@ -9,9 +9,15 @@ import 'package:task_list/domain/repository/local_task_repository.dart';
 import 'package:task_list/screens/home_screen/home_screen.dart';
 import 'package:task_list/screens/login_scren/login_screen.dart';
 
-class AppHome extends StatelessWidget {
+class AppHome extends StatefulWidget {
+  const AppHome({super.key});
+
+  @override
+  State<AppHome> createState() => _AppHomeState();
+}
+
+class _AppHomeState extends State<AppHome> {
   TaskRepository taskRepository = TaskRepository();
-  AppHome({super.key});
 
   @override
   Widget build(BuildContext context) {

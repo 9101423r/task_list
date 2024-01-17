@@ -10,7 +10,7 @@ class CommentsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(comment.id),
+        title: Text(comment.timeLikeID),
         subtitle: Text(comment.descriptions, maxLines: 6),
       ),
     );

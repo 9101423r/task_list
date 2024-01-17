@@ -14,12 +14,16 @@ class TaskRepository {
   TaskRepository() {
     _tasksController = StreamController<List<Task>>.broadcast();
     _loadTasks();
-    getListTask();
+    // getListTask();
+    // _tasksController.add(getListTask());
+
   }
 
-  void getListTask(){
-    List<Task> listTask = _taskBox.values.toList();
+  List<Task> getListTask() {
+    return _taskBox.values.toList();
   }
+
+
 
   void _loadTasks() {
     _taskBox.watch().listen((event) {
@@ -27,8 +31,14 @@ class TaskRepository {
     });
   }
 
+  void removeTaskWithTemporaryUUID(Task task) async{
+
+      await TaskHiveLocalStorage().deleteTaskWithTemporaryUUID(task);
+
+  }
+
   void addTask(Task task) async {
-    if (task.temporaryUUID == 'null') {
+    if (task.id != 0) {
       await TaskHiveLocalStorage().addTask(task);
     } else {
       await TaskHiveLocalStorage().addTaskWithUUID(task);

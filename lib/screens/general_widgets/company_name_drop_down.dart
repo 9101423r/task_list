@@ -26,9 +26,11 @@ class DropDownWithRefKeyAndChangeValue extends StatelessWidget {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               return Text(AppLocalizations.of(context)!.refreshPageText);
-            } else { // TODO
+            } else {
+              // TODO
               List<String> refKeyList = snapshot.data![0];
               List<String> companyName = snapshot.data![1];
+
               String selectedValue = state.selectedValue;
               firstTime
                   ? {
@@ -57,6 +59,9 @@ class DropDownWithRefKeyAndChangeValue extends StatelessWidget {
                       onRefKeyGetIt(refKeyList[companyName
                           .indexWhere((element) => element == newValue)]);
                       onDropDownValueChoose(newValue);
+                      print('[false log]typeOfTask Task: $newValue');
+                      print(
+                          '[false log]  Это его ключевое представление форма :  ${refKeyList[companyName.indexWhere((element) => element == newValue)]}');
                     }
                   },
                 ),

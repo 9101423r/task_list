@@ -27,7 +27,7 @@ class LocalCommentRepository {
 
   void _updateComments() {
     List<Comment> listComment = _commentBox.values
-        .where((element) => task.comments.contains(element.id))
+        .where((element) => task.comments.contains(element))
         .toList();
     _commentsController.add(listComment);
   }

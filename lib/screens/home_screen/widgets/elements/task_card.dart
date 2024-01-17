@@ -9,6 +9,7 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var providerValue = BlocProvider.of<OperationForTaskBloc>(context);
     return Card(
       color: const Color.fromARGB(255, 232, 244, 250),
       child: GestureDetector(
@@ -21,7 +22,7 @@ class TaskCard extends StatelessWidget {
           title: Text(task.title.toString()),
           subtitle: Text(task.descriptions.toString()),
           trailing: Text(
-            'Status:${task.status.toString()}',
+            task.id.toString(),
             style: const TextStyle(color: Colors.green),
           ),
         ),

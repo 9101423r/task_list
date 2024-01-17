@@ -1,9 +1,10 @@
 import 'package:hive/hive.dart';
 import 'package:task_list/constants/validator.dart';
+import 'package:task_list/domain/models/hive_models/comments_model.dart';
 
 part 'task.g.dart';
 
-@HiveType(typeId: 1)
+@HiveType(typeId: 0)
 class Task {
   @HiveField(1)
   final int id;
@@ -18,39 +19,43 @@ class Task {
   @HiveField(6)
   String temporaryUUID;
   @HiveField(7)
-  List<String> comments;
+  List<Comment> comments;
   @HiveField(8)
   String refKey;
-  @HiveField(9)
-  String typeTask;
-  Task(
-      {required this.id,
-      required this.title,
-      required this.descriptions,
-      required this.status,
-      required this.hours,
-      required this.temporaryUUID,
-      required this.comments,
-      required this.refKey,
-      required this.typeTask});
+
+  Task({
+    required this.id,
+    required this.title,
+    required this.descriptions,
+    required this.status,
+    required this.hours,
+    required this.temporaryUUID,
+    required this.comments,
+    required this.refKey,
+  });
 
   factory Task.fromJson(Map<String, dynamic> json) {
+    List<Comment> commentList = (json['Комментарии'] as List<dynamic>?)
+            ?.map((commentJson) => Comment.fromJson(commentJson))
+            .toList() ?? //TODO
+        [];
+
     return Task(
-        id: int.parse(json['Number']),
-        title: json['КраткоеОписание'],
-        descriptions: json['ПодробноеОписание'],
-        status: json['Статус'],
-        hours: (json['ЗатраченноеВремя']).toDouble(),
-        temporaryUUID: 'null',
-        comments: List<String>.from(
-          json['Комментарии'] ?? [],
-        ),
-        refKey: json['Исполнитель_Key'],
-        typeTask: json['ТипЗадачи_Key']);
+      id: int.parse(json['Number']),
+      title: json['КраткоеОписание'],
+      descriptions: json['ПодробноеОписание'],
+      status: json['Статус'],
+      hours: (json['ЗатраченноеВремя']).toDouble(),
+      temporaryUUID: 'null',
+      comments: commentList,
+      refKey: json['ТипЗадачи_Key'],
+    );
   }
 
   Map toMap(String userRefKey) {
     DateTime now = DateTime.now();
+    List<Map<dynamic, dynamic>> commentListMap =
+        comments.map((comment) => comment.toMap(userRefKey)).toList(); //TODO
     var map = <String, dynamic>{};
     map["DeletionMark"] = false;
     map["Date"] = Validator().customDateFormatter(now);
@@ -78,11 +83,15 @@ class Task {
     map["СверухрочныеРаботы"] = false;
     map["ЦенаШтучныхРабот"] = 0;
     map["ДоговорКлиента_Key"] = "00000000-0000-0000-0000-000000000000";
-
-    map["Комментарии"] = comments;
+    map["Комментарии"] = commentListMap;
     map["ИспользуемыеМатериалы"] = [];
     map["ЧекЛист"] = [];
 
     return map;
+  }
+
+  @override
+  String toString() {
+    return 'TaskName: $title, Comments:$comments';
   }
 }

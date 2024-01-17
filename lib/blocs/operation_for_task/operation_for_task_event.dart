@@ -14,11 +14,11 @@ class TaskListSubscriptionRequested extends OperationForTaskEvent {
 class OperationForTaskPressedOK extends OperationForTaskEvent {
   final String title;
   final String descriptipions;
-  final String typeOfTask;
+
   final String refKey;
 
   const OperationForTaskPressedOK(
-      this.title, this.descriptipions, this.typeOfTask, this.refKey);
+      this.title, this.descriptipions, this.refKey);
 }
 
 class DeleteTask extends OperationForTaskEvent {

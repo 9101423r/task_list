@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:developer' as dev;
 import 'package:dio/dio.dart';
+import 'package:task_list/data/hive_local_storage/importan_fields_hive_ld.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 
 class ApiFromServer {
+  bool firstTime = true;
   Future<int> getId() {
     int id = (DateTime.now().microsecond + DateTime.now().millisecond);
     return Future.value(id);
@@ -65,6 +67,10 @@ class ApiFromServer {
         result.add(typeTask[i]['Description']);
         refKeyTask.add(typeTask[i]['Ref_Key']);
       }
+      firstTime
+          ? ImportantFieldsLocalStorage().saveMapValues(refKeyTask, result)
+          : {};
+      firstTime = false;
 
       return [refKeyTask, result];
     } else {
@@ -80,21 +86,25 @@ class ApiFromServer {
     dio.options.headers["authorization"] = basicAuth;
 
     late final Response resultResponse;
+    print("Is it printed PostTaskForServer1");
+    print(postTask);
 
     try {
       resultResponse =
           await dio.post(postAdress, data: postTask.toMap(companyID));
+      print('ISit printed: $resultResponse');
       if (resultResponse.statusCode == 201) {
-        // 201
-        print('Result${resultResponse.data}');
         Task task = Task.fromJson(resultResponse.data);
         return task;
       }
     } on DioException catch (dioErrors) {
       // TODO show snackbar if POST request failure
+      print("Is it printed PostTaskForServer1 DioExceptions");
       dev.log(dioErrors.toString());
+      return postTask;
     } catch (error) {
       dev.log('PostTaskForServer: $error');
+      return postTask;
     }
     return postTask;
   }
@@ -124,8 +134,12 @@ class ApiFromServer {
           var resultList = <Task>[];
           var result = resultResponse.data['value'];
           for (var i in result) {
-            print('TASK FROM SERVER STATUS: ${Task.fromJson(i).status}');
+            // // print((i['Комментарии'][0]['Время']).toString());
+            // if(Task.fromJson(i).id == 7180 ){
+            // print((i['Комментарии'][0]['Время']).toString());}
+            // print("Task.fromJson: ${Task.fromJson(i)}");
             resultList.add(Task.fromJson(i));
+            // TODO create local list<String> ref_key and typeTask и сопоставить значение
           }
           return resultList;
         }
