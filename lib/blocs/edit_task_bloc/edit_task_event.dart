@@ -1,32 +1,17 @@
 part of 'edit_task_bloc.dart';
 
-sealed class EditTaskEvent extends Equatable {
-  const EditTaskEvent();
+sealed class TaskDetailsEvent extends Equatable {
+  const TaskDetailsEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class TaskTapped extends EditTaskEvent {
-  final BuildContext context;
-  final Task task;
-  const TaskTapped({required this.context, required this.task});
-}
 
-// class TaskStatusTapped extends EditTaskEvent {
-//   final BuildContext context;
-//   final String choise;
-//   const TaskStatusTapped({required this.context, required this.choise});
-// }
-
-class TappedAddComment extends EditTaskEvent {
+class TappedAddComment extends TaskDetailsEvent {
   final Task task;
   final String commentText;
   const TappedAddComment({required this.task, required this.commentText});
 }
 
-class ChangeStatus extends EditTaskEvent {
-  final Task task;
-  final String status;
-  const ChangeStatus({required this.task, required this.status});
-}
+class OnSubscriptionRequested extends TaskDetailsEvent{}

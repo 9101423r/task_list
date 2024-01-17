@@ -4,8 +4,8 @@ import 'package:task_list/domain/models/hive_models/task.dart';
 import 'package:uuid/uuid.dart';
 
 class TaskHiveLocalStorage {
-  String boxName = 'taskBox';
-  late final box = Hive.box<Task>(boxName);
+
+  late final box = Hive.box<Task>('taskBox');
 
   Future<void> addTask(Task task) async {
     await box.put(task.id, task);
@@ -16,7 +16,10 @@ class TaskHiveLocalStorage {
   }
 
   Future<void> addTaskWithUUID(Task task) async {
-    task.temporaryUUID == const Uuid().v4();
+    String temporaryUUID = const Uuid().v4();
+    task.temporaryUUID = temporaryUUID;
+    print('UUID.v4: $temporaryUUID');
+    print('Local Storage temporaryUUID: ${task.temporaryUUID}');
     await box.put(task.temporaryUUID, task);
   }
 

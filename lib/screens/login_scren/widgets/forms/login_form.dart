@@ -34,7 +34,7 @@ class _LoginFormState extends State<LoginForm> {
   bool obscurePassword = true;
 
   String? _errorMsg;
-  final Future<List<dynamic>> getFutureList = ApiFromServer().getListCompany();
+  final Future<List<List<String>>> getFutureList = ApiFromServer().getListCompany();
   String refKey = '';
 
   String companyName = 'NO company';
@@ -78,7 +78,7 @@ class _LoginFormState extends State<LoginForm> {
               getFutureList: getFutureList,
               onDropDownValueChoose: (String newValue) {
                 companyName = newValue;
-              },
+              }, typeGetFutureList: 'CompanyNamesAndID',
             )),
           )
         ],

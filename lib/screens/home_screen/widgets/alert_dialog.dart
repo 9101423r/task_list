@@ -18,7 +18,7 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
 
   TextEditingController taskDescriptionController = TextEditingController();
 
-  final Future<List<dynamic>> getFutureList =
+  final Future<List<List<String>>> getFutureList =
       ApiFromServer().getTypeTaskFromServer();
 
   void clearController() {
@@ -26,8 +26,7 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
     taskDescriptionController.clear();
   }
 
-  final Future<List<dynamic>> getTypeAndRefKey =
-      ApiFromServer().getTypeTaskFromServer();
+
 
   String refKey = '';
 
@@ -62,7 +61,7 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
                   getFutureList: getFutureList,
                   onDropDownValueChoose: (String newValue) {
                     typeOfTask = newValue;
-                  },
+                  }, typeGetFutureList: 'TypeTaskAndID',
                 )),
               )
             ]),

@@ -7,41 +7,80 @@ import 'package:task_list/domain/models/hive_models/comments_model.dart';
 import 'package:task_list/domain/models/hive_models/fields.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 
+Future<String> initHivePath() async{
+
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter(appDocumentDirectory.path);
+  print(appDocumentDirectory.path);
+
+  return appDocumentDirectory.path;
+
+
+}
+
+registerAdapter() async{
+  await registerAdapterTask();
+  await registerAdapterComment();
+  await registerAdapterImportantFieldsAdapter();
+}
+
+
 Future<void> openBox() async {
-  if (Platform.isAndroid) {
-    final documentDirectory = await getApplicationDocumentsDirectory();
-    Hive.init(documentDirectory.path);
-  }
 
   await openBox1();
   await openBox2();
   await openBox3();
 }
 
+
 openBox1() async {
   try {
-    Hive.registerAdapter(TaskAdapter());
     await Hive.openBox<Task>('taskBox');
-  } on Exception catch (error) {
+  } on HiveError catch (error) {
     dev.log('Ошибка при открытии taskBox: $error');
   }
 }
 
 openBox2() async {
   try {
-    Hive.registerAdapter(CommentAdapter());
     await Hive.openBox<Comment>('commentBox');
-  } on Exception catch (error) {
+  } on HiveError catch (error) {
     dev.log('Ошибка при открытии commentBox: $error');
   }
 }
 
+
 openBox3() async{
   try{
-    Hive.registerAdapter(ImportantFieldsAdapter());
-    await Hive.openBox<ImportantFields>(ImportantFieldsLocalStorage.boxName);
+    await Hive.openBox<ImportantFields>('importantFieldsBox');
   }
-  on Exception catch(error){
+  on HiveError catch(error){
     dev.log('Ошибка при открытии ImportantFieldsBox: $error');
+  }
+}
+
+registerAdapterImportantFieldsAdapter() async{
+  try{
+    Hive.registerAdapter(ImportantFieldsAdapter());
+  }
+  on HiveError catch(error){
+    dev.log('Ошибка при регистрация ImportantFieldsAdapter: $error');
+  }
+}
+
+registerAdapterTask() async{
+  try{
+    Hive.registerAdapter(TaskAdapter());
+  }
+  on HiveError catch (hiveError){
+    dev.log('Ошибка при регистрации TaskAdapter: $hiveError');
+  }
+}
+
+registerAdapterComment() async {
+  try {
+    Hive.registerAdapter(CommentAdapter());
+  } on HiveError catch (error) {
+    dev.log('Ошибка при регистрации CommentAdapter: $error');
   }
 }

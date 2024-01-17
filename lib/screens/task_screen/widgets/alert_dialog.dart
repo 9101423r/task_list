@@ -19,7 +19,7 @@ class _MyAlertDialogForAddingCommentState
   TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditTaskBloc, EditTaskState>(
+    return BlocBuilder<TaskDetailsBloc, TaskDetailsState>(
       builder: (context, state) {
         return AlertDialog(
           content: TextField(controller: textEditingController, maxLines: 6),
@@ -28,7 +28,7 @@ class _MyAlertDialogForAddingCommentState
                 onPressed: () {
                   setState(() {
                     String commentText = textEditingController.text;
-                    context.read<EditTaskBloc>().add(TappedAddComment(
+                    context.read<TaskDetailsBloc>().add(TappedAddComment(
                         task: widget.task, commentText: commentText));
                   });
                   Navigator.pop(context);

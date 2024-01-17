@@ -5,11 +5,10 @@ import 'package:task_list/domain/models/hive_models/task.dart';
 
 
 class CommentHiveLocalStorage {
-  String boxName = 'commentBox';
-  late final box = Hive.box<Comment>(boxName);
 
-  void addComment(Task task, Comment comment) async {
+  final box = Hive.box<Comment>('commentBox');
 
+  Future<void> addComment(Task task, Comment comment) async {
     TaskHiveLocalStorage().saveCommentId(task, comment);
     await box.put(comment.timeLikeID, comment);
   }

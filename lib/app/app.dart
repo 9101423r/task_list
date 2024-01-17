@@ -5,6 +5,8 @@ import 'package:task_list/app/app_view.dart';
 
 import 'package:task_list/domain/provider/locale_provider.dart';
 
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

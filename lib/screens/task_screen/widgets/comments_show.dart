@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:hive_flutter/adapters.dart';
-import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
-import 'package:task_list/data/hive_local_storage/comment_hive_local_storage.dart';
+import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
 
-import 'package:task_list/domain/models/hive_models/comments_model.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
-
 import 'package:task_list/screens/task_screen/widgets/comments_card.dart';
 
 class CommentsListView extends StatefulWidget {
@@ -20,30 +16,31 @@ class CommentsListView extends StatefulWidget {
 }
 
 class _CommentsListViewState extends State<CommentsListView> {
-  late final Box<Comment> box;
-  @override
-  void initState() {
-    super.initState();
-    box = CommentHiveLocalStorage().refreshBox();
-    box.watch().listen((event) {
-      setState(() {});
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    var providerValue = BlocProvider.of<OperationForTaskBloc>(context);
-    return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
+    return BlocBuilder<TaskDetailsBloc, TaskDetailsState>(
       builder: (context, state) {
-        return ListView(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          children: box.values
-              .where((element) => widget.task.comments.contains(element))
-              .map((comment) => CommentsCard(comment: comment))
-              .toList(),
-        );
+        if (state.commentList.isEmpty) {
+          if (state.status == CommentStats.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state.status != CommentStats.success) {
+            return const SizedBox();
+          } else {
+            return const Center(child: Text('JUST TEXT'));
+          }
+        }
+        return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return CommentsCard(comment: state.commentList[index]);
+            },
+            itemCount: state.commentList.length,
+            );
+
       },
     );
   }

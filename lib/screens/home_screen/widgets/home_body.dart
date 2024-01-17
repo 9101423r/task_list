@@ -13,9 +13,11 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
 
+
+
+
   @override
   Widget build(BuildContext context) {
-    var providerValue = BlocProvider.of<OperationForTaskBloc>(context);
     return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
       builder: (context, state) {
         if (state.taskList.isEmpty) {
@@ -29,12 +31,32 @@ class _HomeBodyState extends State<HomeBody> {
             return const Center(child: Text('JUST TEXT'));
           }
         }
-        return ListView.builder(
-            itemBuilder: (context, index) {
-              return  TaskCard(task: state.taskList[index]);
+        else{
 
-            },
-            itemCount: state.taskList.length);
+            return Stack(
+              children:[ ListView.builder(
+                  itemBuilder: (context, index) {
+                    return  TaskCard(task: state.taskList[index]);
+
+                  },
+                  itemCount: state.taskList.length),
+                if (state.status == TaskStatus.loading)
+                  const Opacity(
+                    opacity: 0.3,
+                    child: ModalBarrier(dismissible: false, color: Colors.black),
+                  ),
+
+                if (state.status == TaskStatus.loading)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+              ]
+            );
+          }
+
+
+
+
       },
     );
   }

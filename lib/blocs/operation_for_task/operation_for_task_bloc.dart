@@ -39,28 +39,28 @@ class OperationForTaskBloc
     TaskListSubscriptionRequested event,
     Emitter<OperationForTaskState> emit,
   ) async {
-    if (FirebaseAuth.instance.currentUser != null) {
+
       emit(state.copyWith(
-          status: () => TaskStatus.loading,
-          taskList: () => _taskRepository.getListTask()));
+          status: () => TaskStatus.loading)); // TODO ADD here taskList if I ruin
 
       if(_taskRepository.getListTask().isEmpty){
         emit(const OperationForTaskState(status: TaskStatus.success,taskList: []));
       }
       else {
-        await emit.forEach<List<Task>>(
-          _taskRepository.tasksStream,
-          onData: (tasks) =>
-              state.copyWith(
-                status: () => TaskStatus.success,
-                taskList: () => tasks,
-              ),
-          onError: (_, __) =>
-              state.copyWith(
-                status: () => TaskStatus.failure,
-              ),
-        );
-      }
+        emit(OperationForTaskState(status: TaskStatus.success,taskList: _taskRepository.getListTask()));// TODO Delete the line
+        // await emit.forEach<List<Task>>(
+        //   _taskRepository.getListTask(),
+        //   onData: (tasks) =>
+        //       state.copyWith(
+        //         status: () => TaskStatus.success,
+        //         taskList: () => tasks,
+        //       ),
+        //   onError: (_, __) =>
+        //       state.copyWith(
+        //         status: () => TaskStatus.failure,
+        //       ),
+        // );
+
     }
   }
   Future<void> _addingTaskForServer(
@@ -83,6 +83,7 @@ class OperationForTaskBloc
 
       Task getTask =
       await ApiFromServer().postTaskForServer(newTask, companyRefKeyID);
+      print("getTask.temporaryUUID:${getTask.temporaryUUID}");
       _taskRepository.addTask(getTask);
       state.taskList.add(getTask);
       List<Task> returnTaskList = state.taskList;
@@ -127,13 +128,12 @@ class OperationForTaskBloc
 
 
 
+
     List<Task> getResultsFromServer = await ApiFromServer().getTasksFromServer(updatedTaskList);
     for(var task in getResultsFromServer){
      _taskRepository.addTask(task);
     }
-    for(var task in allTaskInPageWithoutID){
-      _taskRepository.addTask(task);
-    }
+
     List<Task> resultTasksForState = [];
     resultTasksForState.addAll(getResultsFromServer);
     resultTasksForState.addAll(allTaskInPageWithoutID);

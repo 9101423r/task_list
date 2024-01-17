@@ -15,7 +15,7 @@ class ApiFromServer {
   String password = '111';
   final dio = Dio();
 
-  Future<List<dynamic>> getListCompany() async {
+  Future<List<List<String>>> getListCompany() async {
     // Возвращаю лист [Первое Лист из refKey, второе Лист из название]
     String basicAuth =
         'Basic ${base64.encode(utf8.encode('$username:$password'))}';
@@ -36,15 +36,18 @@ class ApiFromServer {
 
       for (var i = 0; i < contragentList.length; i++) {
         result.add(contragentList[i]['Description']);
+
         refKeyUser.add(contragentList[i]['Ref_Key']);
       }
-      return [refKeyUser, result];
+      print("we returning first :${ [refKeyUser]}");
+      print("we returning second :${ [result]}");
+      return [refKeyUser.toList(), result.toList()];
     } else {
       return [];
     }
   }
 
-  Future<List<dynamic>> getTypeTaskFromServer() async {
+  Future<List<List<String>>> getTypeTaskFromServer() async {
     String basicAuth =
         'Basic ${base64.encode(utf8.encode('$username:$password'))}';
     dio.options.headers["authorization"] = basicAuth;
@@ -147,9 +150,11 @@ class ApiFromServer {
       }
     } on DioException catch (dioErrors) {
       dev.log(dioErrors.toString());
+
     } catch (error) {
       dev.log('PostTaskForServer: $error');
+
     }
-    return [];
+    return listTask;
   }
 }

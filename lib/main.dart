@@ -9,12 +9,21 @@ import 'firebase_options.dart';
 
 
 void main() async {
+  print('Its first print');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Bloc.observer = MyGlobalObserver();
+  String path  = await initHivePath();
+
+  print('is it printed initPath : $path');
+  await registerAdapter();
+  print('is it printed registerAdapter');
+
   await openBox();
+  print('is it printed openBox');
+
 
   runApp(const MyApp());
 }

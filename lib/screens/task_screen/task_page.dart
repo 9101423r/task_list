@@ -10,15 +10,29 @@ import 'package:task_list/screens/task_screen/widgets/just_text.dart';
 
 import '../../data/hive_local_storage/importan_fields_hive_ld.dart';
 
-class TaskPage extends StatefulWidget {
+class TaskPage extends StatelessWidget {
   final Task task;
   const TaskPage({required this.task, super.key});
 
   @override
-  State<TaskPage> createState() => _TaskPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (context) => TaskDetailsBloc(task: task),
+        child: TaskPageStateFull(
+          task: task,
+        ));
+  }
 }
 
-class _TaskPageState extends State<TaskPage> {
+class TaskPageStateFull extends StatefulWidget {
+  final Task task;
+  const TaskPageStateFull({required this.task, super.key});
+
+  @override
+  State<TaskPageStateFull> createState() => _TaskPageState();
+}
+
+class _TaskPageState extends State<TaskPageStateFull> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +43,7 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Column bodyMain(BuildContext context) {
+    var providerValue = BlocProvider.of<TaskDetailsBloc>(context);
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       JustText(stringType: 'Name', stringSpec: widget.task.title),
       JustText(
@@ -47,31 +62,31 @@ class _TaskPageState extends State<TaskPage> {
           stringType: 'Descriptions', stringSpec: widget.task.descriptions),
       JustText(stringType: 'Status', stringSpec: widget.task.status),
       JustText(stringType: 'Hour', stringSpec: widget.task.hours.toString()),
-      commentsRow(context),
+      Row(
+        children: [
+          const Expanded(
+              child: JustText(stringType: 'Comments', stringSpec: '')),
+          TextButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return BlocProvider.value(
+                        value: providerValue,
+                        child: MyAlertDialogForAddingComment(task: widget.task),
+                      );
+                    });
+              },
+              child: Text(AppLocalizations.of(context)!.addComment))
+        ],
+      ),
       const Divider(),
-      CommentsListView(
-        task: widget.task,
+      BlocProvider.value(
+        value: providerValue..add(OnSubscriptionRequested()),
+        child: CommentsListView(
+          task: widget.task,
+        ),
       ),
     ]);
-  }
-
-  Row commentsRow(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(child: JustText(stringType: 'Comments', stringSpec: '')),
-        TextButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return BlocProvider(
-                      create: (context) => EditTaskBloc(),
-                      child: MyAlertDialogForAddingComment(task: widget.task),
-                    );
-                  });
-            },
-            child: Text(AppLocalizations.of(context)!.addComment))
-      ],
-    );
   }
 }
