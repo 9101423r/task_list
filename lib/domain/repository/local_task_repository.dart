@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:task_list/data/hive_local_storage/lis_of_stages_local_storage.dart';
 import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
+import 'package:task_list/domain/models/hive_models/comments_model.dart';
 import 'package:task_list/domain/repository/local_task_comment_repositoryt.dart';
 
 import '../models/hive_models/task.dart';
@@ -15,8 +17,6 @@ class TaskRepository {
   TaskRepository() {
     _tasksController = StreamController<List<Task>>.broadcast();
     _loadTasks();
-    // getListTask();
-    // _tasksController.add(getListTask());
   }
 
   List<Task> getListTask() {
@@ -34,16 +34,23 @@ class TaskRepository {
   }
 
   void addTask(Task task) async {
-
     if (task.id != 0) {
       for (var comment in task.comments) {
-        await LocalCommentRepository(task: task).saveComment(comment);
+        Comment saveComment = comment;
+        Task saveTask = task;
+        await LocalCommentRepository(task: saveTask).saveComment(saveComment);
+      }
+      for (var stage in task.listOfStages) {
+        await ListOfStagesLocalStorage().addStage(stage);
       }
       await TaskHiveLocalStorage().addTask(task);
     } else {
-      print("Is IT printed because task.id == 0");
       await TaskHiveLocalStorage().addTaskWithUUID(task);
     }
+  }
+
+  void updateTasksStream() {
+    _tasksController.add(_taskBox.values.toList());
   }
 
   void clearBox() {

@@ -41,3 +41,10 @@ class PageRefreshed extends OperationForTaskEvent {
 }
 
 class SignOut extends OperationForTaskEvent {}
+
+
+class PageViewChange extends OperationForTaskEvent{
+  final int pageInt;
+  final PageController pageController;
+  const PageViewChange({required this.pageInt,required this.pageController});
+}

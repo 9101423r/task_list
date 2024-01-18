@@ -5,12 +5,6 @@ import 'package:task_list/data/hive_local_storage/importan_fields_hive_ld.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 
 class ApiFromServer {
-  bool firstTime = true;
-  Future<int> getId() {
-    int id = (DateTime.now().microsecond + DateTime.now().millisecond);
-    return Future.value(id);
-  }
-
   String username = 'Пак В';
   String password = '111';
   final dio = Dio();
@@ -39,8 +33,8 @@ class ApiFromServer {
 
         refKeyUser.add(contragentList[i]['Ref_Key']);
       }
-      print("we returning first :${ [refKeyUser]}");
-      print("we returning second :${ [result]}");
+      print("we returning first :${[refKeyUser]}");
+      print("we returning second :${[result]}");
       return [refKeyUser.toList(), result.toList()];
     } else {
       return [];
@@ -70,10 +64,9 @@ class ApiFromServer {
         result.add(typeTask[i]['Description']);
         refKeyTask.add(typeTask[i]['Ref_Key']);
       }
-      firstTime
+      ImportantFieldsLocalStorage().box.isEmpty // TODO 
           ? ImportantFieldsLocalStorage().saveMapValues(refKeyTask, result)
           : {};
-      firstTime = false;
 
       return [refKeyTask, result];
     } else {
@@ -150,10 +143,8 @@ class ApiFromServer {
       }
     } on DioException catch (dioErrors) {
       dev.log(dioErrors.toString());
-
     } catch (error) {
       dev.log('PostTaskForServer: $error');
-
     }
     return listTask;
   }

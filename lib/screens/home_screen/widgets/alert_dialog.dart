@@ -26,8 +26,6 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
     taskDescriptionController.clear();
   }
 
-
-
   String refKey = '';
 
   late String typeOfTask;
@@ -61,7 +59,8 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
                   getFutureList: getFutureList,
                   onDropDownValueChoose: (String newValue) {
                     typeOfTask = newValue;
-                  }, typeGetFutureList: 'TypeTaskAndID',
+                  },
+                  typeGetFutureList: 'TypeTaskAndID',
                 )),
               )
             ]),

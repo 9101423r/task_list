@@ -9,7 +9,6 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var providerValue = BlocProvider.of<OperationForTaskBloc>(context);
     return Card(
       color: const Color.fromARGB(255, 232, 244, 250),
       child: GestureDetector(

@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:task_list/data/api/api_from_1c.dart';
+import 'package:task_list/domain/repository/local_task_comment_repositoryt.dart';
 
 import 'package:task_list/domain/repository/local_task_repository.dart';
 import 'package:task_list/domain/auth/firebase_auth.dart';
@@ -25,6 +26,12 @@ class OperationForTaskBloc
 
     on<ClearBoxTapped>((event, emit) => TaskRepository().clearBox());
 
+    on<PageViewChange>((event,emit) {
+
+          event.pageController.jumpToPage(event.pageInt);
+
+    });
+
     on<PageRefreshed>((event, emit) async {
       // TODO
       await pageRefreshed(event, emit);
@@ -34,6 +41,7 @@ class OperationForTaskBloc
   }
 
   final TaskRepository _taskRepository;
+
 
   Future<void> _onSubscriptionRequested(
     TaskListSubscriptionRequested event,
@@ -69,6 +77,8 @@ class OperationForTaskBloc
     {
       emit(OperationForTaskState(
           status: TaskStatus.loading, taskList: List.of(state.taskList)));
+
+
       Task newTask = Task(
           id: 0,
           title: event.title,
@@ -77,19 +87,30 @@ class OperationForTaskBloc
           hours: 0,
           temporaryUUID: 'null',
           comments: [],
-          refKey: event.refKey);
+          refKey: event.refKey,
+        listOfStages: []
+      );
 
+      // try{
+      //   String companyRefKeyID = await FirebaseUserAuth().getCompainRefKey();
+      //   Task getTask =
+      //   await ApiFromServer().postTaskForServer(newTask, companyRefKeyID);
+      //   _taskRepository.addTask(getTask);
+      //   _taskRepository.
+      // }
+      // catch (error){
+      //
+      // }
       String companyRefKeyID = await FirebaseUserAuth().getCompainRefKey();
 
       Task getTask =
       await ApiFromServer().postTaskForServer(newTask, companyRefKeyID);
-      print("getTask.temporaryUUID:${getTask.temporaryUUID}");
       _taskRepository.addTask(getTask);
       state.taskList.add(getTask);
       List<Task> returnTaskList = state.taskList;
 
       emit(OperationForTaskState(
-          status: TaskStatus.success, taskList: returnTaskList));
+          status: TaskStatus.success, taskList: List.of(state.taskList)));
     }
   }
 
@@ -101,6 +122,7 @@ class OperationForTaskBloc
     List<Task> allTaskInPageWithoutID = state.taskList.where((element) => element.id == 0).toList();
     List<Task> allTaskInPageWithID = [...state.taskList.where((element) => element.id != 0)];
     List<Task> forRemoveOperation = List.from(allTaskInPageWithoutID);
+    List<Task> forUpdateOperation = List.from(allTaskInPageWithID);
 
     allTaskInPageWithID.removeWhere((task) => task.id == 0);
 
@@ -108,19 +130,19 @@ class OperationForTaskBloc
 
     for (var task in forRemoveOperation) {
       Task getTask = await ApiFromServer().postTaskForServer(task, companyRefKeyID);
-      print('We get GETTask?');
-      print(getTask);
-
-      if (int.parse(getTask.id.toString()) != 0) {
+     
+      if (getTask.id != 0) {
         _taskRepository.removeTaskWithTemporaryUUID(task);
         _taskRepository.addTask(getTask);
-        allTaskInPageWithoutID.removeWhere((task)=> task.title ==getTask.title);
+        allTaskInPageWithoutID.removeWhere((task)=> task.title == getTask.title);
         allTaskInPageWithID.add(getTask);
-      } else {
-        print("THIS ELSE WORK?");
-        print(allTaskInPageWithoutID);
       }
+
     }
+    // for(var task in forUpdateOperation){
+    //   Task getTask = await ApiFromServer
+    //
+    // }
 
 
     List<Task> updatedTaskList = [];
@@ -131,7 +153,7 @@ class OperationForTaskBloc
 
     List<Task> getResultsFromServer = await ApiFromServer().getTasksFromServer(updatedTaskList);
     for(var task in getResultsFromServer){
-     _taskRepository.addTask(task);
+      _taskRepository.addTask(task);
     }
 
     List<Task> resultTasksForState = [];
@@ -143,5 +165,9 @@ class OperationForTaskBloc
 
   void taskTapped(TaskTapped event, Emitter<OperationForTaskState> emit) {
     Navigator.pushNamed(event.context, '/task_screen', arguments: event.task);
+  }
+
+  Future<void> saveTask() async{
+
   }
 }

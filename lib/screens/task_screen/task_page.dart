@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 
-import 'package:task_list/screens/task_screen/widgets/alert_dialog.dart';
-import 'package:task_list/screens/task_screen/widgets/comments_show.dart';
+import 'package:task_list/screens/task_screen/widgets/elements/alert_dialog.dart';
+import 'package:task_list/screens/task_screen/widgets/comments/comments_show.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:task_list/screens/task_screen/widgets/just_text.dart';
+import 'package:task_list/screens/task_screen/widgets/elements/just_text.dart';
+import 'package:task_list/screens/task_screen/widgets/elements/pop_u_menu.dart';
 
 import '../../data/hive_local_storage/importan_fields_hive_ld.dart';
+import '../../domain/repository/local_task_comment_repositoryt.dart';
 
 class TaskPage extends StatelessWidget {
   final Task task;
@@ -16,8 +18,11 @@ class TaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LocalCommentRepository localCommentRepository =
+        LocalCommentRepository(task: task);
     return BlocProvider(
-        create: (context) => TaskDetailsBloc(task: task),
+        create: (context) =>
+            TaskDetailsBloc(localCommentRepository: localCommentRepository),
         child: TaskPageStateFull(
           task: task,
         ));
@@ -36,7 +41,14 @@ class _TaskPageState extends State<TaskPageStateFull> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(leading: const BackButton()),
+        appBar: AppBar(
+          leading: const BackButton(),
+          actions: [
+            TaskPopUpMenuButton(
+              task: widget.task,
+            )
+          ],
+        ),
         body: SingleChildScrollView(
           child: bodyMain(context),
         ));
@@ -57,6 +69,11 @@ class _TaskPageState extends State<TaskPageStateFull> {
               .firstWhere((entry) => entry.key == widget.task.refKey)
               .value
               .toString()),
+      JustText(
+          stringType: 'FirstElementCheckList',
+          stringSpec: widget.task.listOfStages.isEmpty
+              ? 'Empty'
+              : widget.task.listOfStages.first.descriptions.toString()),
       JustText(stringType: 'NumberID', stringSpec: widget.task.id.toString()),
       JustText(
           stringType: 'Descriptions', stringSpec: widget.task.descriptions),
@@ -80,7 +97,6 @@ class _TaskPageState extends State<TaskPageStateFull> {
               child: Text(AppLocalizations.of(context)!.addComment))
         ],
       ),
-      const Divider(),
       BlocProvider.value(
         value: providerValue..add(OnSubscriptionRequested()),
         child: CommentsListView(

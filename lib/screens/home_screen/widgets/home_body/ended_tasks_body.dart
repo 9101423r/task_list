@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
-import 'package:task_list/screens/home_screen/widgets/elements/task_card.dart';
+import '../elements/task_card.dart';
 
-import '../../../../domain/models/hive_models/task.dart';
-
-class HomeBody extends StatefulWidget {
-  const HomeBody({super.key});
+class EndedTaskPage extends StatefulWidget {
+  const EndedTaskPage({super.key});
 
   @override
-  State<HomeBody> createState() => _HomeBodyState();
+  State<EndedTaskPage> createState() => _EndedTaskPageState();
 }
 
-class _HomeBodyState extends State<HomeBody> {
+class _EndedTaskPageState extends State<EndedTaskPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
       builder: (context, state) {
         List<Task> spesificListTask =
-            state.taskList.where((task) => task.status != 'Закрыта').toList();
+            state.taskList.where((task) => task.status == 'Закрыта').toList();
         if (spesificListTask.isEmpty) {
           if (state.status == TaskStatus.loading) {
             return const Center(

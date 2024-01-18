@@ -23,7 +23,7 @@ class Validator {
   var maskFormatter = MaskTextInputFormatter(
       mask: '+7 (###) ###-##-##',
       filter: {'#': RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy);
+      type: MaskAutoCompletionType.eager);
 
   String customDateFormatter(DateTime dateTime) {
     String month  = dateTime.month<10 ? '0${dateTime.month}' : '${dateTime.month}';

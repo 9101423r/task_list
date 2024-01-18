@@ -26,6 +26,11 @@ class AppTheme {
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
       ),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.red,
+      elevation: 0
+    ),
     dropdownMenuTheme:
         const DropdownMenuThemeData(textStyle: AppTextStyles.subtitleStyle),
   );

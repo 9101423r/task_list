@@ -12,12 +12,12 @@ final class TaskDetailsState extends Equatable {
   final List<Comment> commentList;
 
   TaskDetailsState copyWith({
-    CommentStats Function()? status,
-    List<Comment> Function()? commentList,
+    CommentStats? status,
+    List<Comment>? commentList,
   }) {
     return TaskDetailsState(
-      status: status != null ? status() : this.status,
-      commentList: commentList != null ? commentList() : this.commentList,
+      status: status ?? this.status,
+      commentList: commentList ?? this.commentList,
     );
   }
 

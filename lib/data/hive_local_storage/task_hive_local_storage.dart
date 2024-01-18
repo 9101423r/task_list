@@ -4,7 +4,6 @@ import 'package:task_list/domain/models/hive_models/task.dart';
 import 'package:uuid/uuid.dart';
 
 class TaskHiveLocalStorage {
-
   late final box = Hive.box<Task>('taskBox');
 
   Future<void> addTask(Task task) async {

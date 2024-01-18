@@ -23,11 +23,11 @@ class _SignFormState extends State<SignForm> {
   bool obscurePassword = true;
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SignInBloc,SignInState>(
-      listener:(BuildContext context,SignInState state) {
-        if(state is SignInFailure){
-          ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(state.firebaseException)));
+    return BlocListener<SignInBloc, SignInState>(
+      listener: (BuildContext context, SignInState state) {
+        if (state is SignInFailure) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.firebaseException)));
         }
       },
       child: BlocBuilder<SignInBloc, SignInState>(builder: (context, state) {

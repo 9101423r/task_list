@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
 
 import 'package:task_list/domain/models/hive_models/task.dart';
-import 'package:task_list/screens/task_screen/widgets/comments_card.dart';
+import 'package:task_list/screens/task_screen/widgets/comments/comments_card.dart';
 
 class CommentsListView extends StatefulWidget {
   final Task task;
@@ -32,15 +32,14 @@ class _CommentsListViewState extends State<CommentsListView> {
           }
         }
         return ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              return CommentsCard(comment: state.commentList[index]);
-            },
-            itemCount: state.commentList.length,
-            );
-
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            return CommentsCard(comment: state.commentList[index]);
+          },
+          itemCount: state.commentList.length,
+        );
       },
     );
   }
