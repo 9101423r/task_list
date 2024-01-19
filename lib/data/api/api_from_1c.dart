@@ -3,6 +3,7 @@ import 'dart:developer' as dev;
 import 'package:dio/dio.dart';
 import 'package:task_list/data/hive_local_storage/importan_fields_hive_ld.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
+import 'package:flutter_config/flutter_config.dart';
 
 class ApiFromServer {
   String username = 'Пак В';
@@ -16,6 +17,10 @@ class ApiFromServer {
 
     dio.options.headers["authorization"] = basicAuth;
     late final response;
+    print("await name Пак В:${FlutterConfig.get('ADMIN_NAME')}");
+    print('await post adress : ${FlutterConfig.get('API_URL_1C_WITH_POST_TASK')}');
+
+    print('await password 111 :${FlutterConfig.get('ADMIN_PASSWORD')}');
     try {
       response = await dio.get(
           'http://192.168.1.15/Base/odata/standard.odata/Catalog_Контрагенты?\$format=application/json');
@@ -64,7 +69,7 @@ class ApiFromServer {
         result.add(typeTask[i]['Description']);
         refKeyTask.add(typeTask[i]['Ref_Key']);
       }
-      ImportantFieldsLocalStorage().box.isEmpty // TODO 
+      ImportantFieldsLocalStorage().box.isEmpty // TODO
           ? ImportantFieldsLocalStorage().saveMapValues(refKeyTask, result)
           : {};
 

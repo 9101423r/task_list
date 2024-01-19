@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:task_list/domain/auth/auth_data.dart';
-import 'package:task_list/domain/auth/firebase_auth.dart';
+import 'package:task_list/data/auth/auth_data.dart';
+import 'package:task_list/data/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/user_model.dart';
 
 part 'sign_up_event.dart';

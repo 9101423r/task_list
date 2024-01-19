@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:task_list/constants/validator.dart';
 
-import 'package:task_list/domain/auth/firebase_auth.dart';
+import 'package:task_list/data/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/hive_models/comments_model.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 import 'package:task_list/domain/repository/local_task_comment_repositoryt.dart';

@@ -63,11 +63,11 @@ class Task {
 
   Map toMap(String userRefKey) {
     DateTime now = DateTime.now();
-    List<Map<dynamic, dynamic>> commentListMap =
-        comments.map((comment) => comment.toMap(userRefKey)).toList(); //TODO
+    List<Map<String, dynamic>> commentListMap =
+    comments.map((comment) => comment.toMap(userRefKey)).cast<Map<String, dynamic>>().toList();
     List<Map<dynamic, dynamic>> listOfStagesMap =
         listOfStages.map((stage) => stage.toMap()).toList();
-    var map = <String, dynamic>{};
+    Map<String,dynamic> map = <String, dynamic>{};
     map["DeletionMark"] = false;
     map["Date"] = Validator().customDateFormatter(now);
     map["Posted"] = true;
@@ -105,4 +105,6 @@ class Task {
   String toString() {
     return '{$title-$comments}';
   }
+
+
 }

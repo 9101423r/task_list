@@ -23,7 +23,7 @@ class Comment {
   }
 
   Map toMap(String userRefKey) {
-    var map = <String, dynamic>{};
+    Map<String, dynamic> map = <String, dynamic>{};
     map['Ref_Key'] = userRefKey;
     map['Автор'] = author;
     map['Время'] = timeLikeID;

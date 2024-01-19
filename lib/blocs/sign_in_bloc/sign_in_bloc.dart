@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:task_list/domain/auth/auth_data.dart';
+import 'package:task_list/data/auth/auth_data.dart';
 
 
 part 'sign_in_event.dart';

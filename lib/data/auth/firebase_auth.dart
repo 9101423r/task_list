@@ -74,6 +74,35 @@ class FirebaseUserAuth {
     }
   }
 
+  Future<String> getCompanyName() async {
+    String email = FirebaseAuth.instance.currentUser!.email!;
+   
+
+    try {
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await usersCollection.doc(email).get();
+      if (docSnapshot.exists) {
+        Map<String, dynamic> data = docSnapshot.data()!;
+
+        String userNameFromFirebase = data["companyName"];
+        return userNameFromFirebase;
+      } else {
+        print(
+            "Документ не существует для пользователя с UID: ${FirebaseAuth.instance.currentUser!.uid}");
+        return 'docSnapshot пустой';
+      }
+    } on FirebaseException catch (e) {
+      dev.log(e.toString());
+      print('FirebaseErrors on get ref_key:$e');
+      return e.toString();
+    } catch (e) {
+      print('Errors on get ref_key: $e');
+      return e.toString();
+
+      // companyRefKeyID = '968b4653-12fe-11ed-b540-1078d2580ce6'; // TODO
+    }
+  }
+
   Future<void> logOut() async {
     _auth.signOut();
   }
