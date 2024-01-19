@@ -17,7 +17,7 @@ class FirebaseUserAuth {
     }
   }
 
-  Future<String> getCompainRefKey() async {
+  Future<String> getCompanyRefKey() async {
     String email = FirebaseAuth.instance.currentUser!.email!;
    
 
