@@ -34,8 +34,8 @@ class _LoginFormState extends State<LoginForm> {
   bool obscurePassword = true;
 
   String? _errorMsg;
-  final Future<List<List<String>>> getFutureList =
-      ApiFromServer().getListCompany();
+  // final Future<List<List<String>>> getFutureList =
+  //     ApiFromServer().getListCompany();
   String refKey = '';
 
   String companyName = 'NO company';
@@ -69,20 +69,20 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           Text('${AppLocalizations.of(context)!.loginCompanyName}:',
               style: AppTextStyles.companyName, maxLines: 2),
-          BlocProvider(
-            create: (context) => DropDownBloc(),
-            child: Expanded(
-                child: DropDownWithRefKeyAndChangeValue(
-              onRefKeyGetIt: (String value) {
-                refKey = value;
-              },
-              getFutureList: getFutureList,
-              onDropDownValueChoose: (String newValue) {
-                companyName = newValue;
-              },
-              typeGetFutureList: 'CompanyNamesAndID',
-            )),
-          )
+          // BlocProvider(
+          //   create: (context) => DropDownBloc(),
+          //   child: Expanded(
+          //       child: DropDownWithRefKeyAndChangeValue(
+          //     onRefKeyGetIt: (String value) {
+          //       refKey = value;
+          //     },
+          //     getFutureList: getFutureList,
+          //     onDropDownValueChoose: (String newValue) {
+          //       companyName = newValue;
+          //     },
+          //     typeGetFutureList: 'CompanyNamesAndID',
+          //   )),
+          // )
         ],
       ),
     ));

@@ -58,17 +58,7 @@ class _TaskPageState extends State<TaskPageStateFull> {
     var providerValue = BlocProvider.of<TaskDetailsBloc>(context);
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       JustText(stringType: 'Name', stringSpec: widget.task.title),
-      JustText(
-          stringType: 'Type',
-          stringSpec: ImportantFieldsLocalStorage()
-              .box
-              .values
-              .first
-              .typeTaskAndRefKey
-              .entries
-              .firstWhere((entry) => entry.key == widget.task.refKey)
-              .value
-              .toString()),
+
       JustText(
           stringType: 'FirstElementCheckList',
           stringSpec: widget.task.listOfStages.isEmpty

@@ -5,7 +5,8 @@ part 'fields.g.dart';
 @HiveType(typeId: 2)
 class ImportantFields {
   @HiveField(1)
-  Map<String, String> typeTaskAndRefKey;
+  List<Map<String, String>> someImportantMaps;
+  
 
-  ImportantFields({required this.typeTaskAndRefKey});
+  ImportantFields({required this.someImportantMaps});
 }

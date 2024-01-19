@@ -7,13 +7,11 @@ import 'dart:developer' as dev;
 
 class DropDownWithRefKeyAndChangeValue extends StatefulWidget {
   final Future<List<List<String>>> getFutureList;
-  final String
-      typeGetFutureList; // TWO TYPE 'TypeTaskAndID' or 'CompanyNamesAndID'
+
   const DropDownWithRefKeyAndChangeValue(
       {required this.getFutureList,
       required this.onRefKeyGetIt,
       required this.onDropDownValueChoose,
-      required this.typeGetFutureList,
       super.key});
   final ValueChanged<String> onRefKeyGetIt;
   final ValueChanged<String> onDropDownValueChoose;
@@ -25,53 +23,49 @@ class DropDownWithRefKeyAndChangeValue extends StatefulWidget {
 
 class _DropDownWithRefKeyAndChangeValueState
     extends State<DropDownWithRefKeyAndChangeValue> {
-  final List<List<String>>? listDynamicCrutchKeys =
-      ImportantFieldsLocalStorage().box.values.isNotEmpty
-          ? [
-              ImportantFieldsLocalStorage()
-                  .box
-                  .values
-                  .first
-                  .typeTaskAndRefKey
-                  .keys
-                  .toList(),
-              ImportantFieldsLocalStorage()
-                  .box
-                  .values
-                  .first
-                  .typeTaskAndRefKey
-                  .values
-                  .toList()
-            ]
-          : [];
+  // final List<List<String>>? listDynamicCrutchKeys =
+  //     ImportantFieldsLocalStorage().box.values.isNotEmpty
+  //         ? [
+  //             ImportantFieldsLocalStorage()
+  //                 .box
+  //                 .get(1)!
+  //                 .someImportantMaps[1]
+  //                 .keys
+  //                 .toList(),
+  //             ImportantFieldsLocalStorage()
+  //                 .box
+  //                 .get(1)!
+  //                 .someImportantMaps[1]
+  //                 .values
+  //                 .toList()
+  //           ]
+  //         : [];
 
-  Future<List<List<String>>>?
-      definitionWhatINFutureGETAndCheckBoxValues() async {
-    if (widget.typeGetFutureList == 'CompanyNamesAndID') {
-      return widget.getFutureList;
-    } else {
-      if (ImportantFieldsLocalStorage()
-          .box
-          .values
-          .first
-          .typeTaskAndRefKey
-          .isNotEmpty) {
-        return Future.value(listDynamicCrutchKeys);
-      } else {
-        return widget.getFutureList;
-      }
-    }
-  }
+  // Future<List<List<String>>>?
+  //     definitionWhatINFutureGETAndCheckBoxValues() async {
+  //   print('Check what thr list here :${listDynamicCrutchKeys}');
 
-  late Future<List<List<String>>>? finallyGettingFutureList;
+  //     if (ImportantFieldsLocalStorage()
+  //         .box
+  //         .get(1)!
+  //         .someImportantMaps[1]
+  //         .isNotEmpty) {
+  //       return Future.value(listDynamicCrutchKeys);
+  //     } else {
+  //       return widget.getFutureList;
+  //     }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    finallyGettingFutureList = definitionWhatINFutureGETAndCheckBoxValues();
-    dev.log('Its initState DropDownWithRefKeyAndChangeValue');
-  }
+  // }
+
+  // // late Future<List<List<String>>>? finallyGettingFutureList;
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   // finallyGettingFutureList = definitionWhatINFutureGETAndCheckBoxValues();
+  //   dev.log('Its initState DropDownWithRefKeyAndChangeValue');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +74,11 @@ class _DropDownWithRefKeyAndChangeValueState
     return BlocBuilder<DropDownBloc, DropdownBlocState>(
       builder: (context, state) {
         return FutureBuilder<List<List<String>>>(
-          future: finallyGettingFutureList,
+          future: widget.getFutureList,
           builder: (context, snapshot) {
+            print(snapshot.data);
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: const CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Text(AppLocalizations.of(context)!.refreshPageText);
             } else if (snapshot.data == null) {

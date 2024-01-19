@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter/material.dart';
+
 import 'package:task_list/data/api/api_from_1c.dart';
 import 'package:task_list/data/auth/firebase_tasks.dart';
-
 
 import 'package:task_list/domain/repository/local_task_repository.dart';
 import 'package:task_list/data/auth/firebase_auth.dart';
@@ -15,6 +15,10 @@ part 'operation_for_task_state.dart';
 
 class OperationForTaskBloc
     extends Bloc<OperationForTaskEvent, OperationForTaskState> {
+
+
+  final TaskRepository _taskRepository;
+
   OperationForTaskBloc({required TaskRepository taskRepository})
       : _taskRepository = taskRepository,
         super(const OperationForTaskState()) {
@@ -40,7 +44,7 @@ class OperationForTaskBloc
     on<SignOut>((event, emit) => FirebaseUserAuth().logOut());
   }
 
-  final TaskRepository _taskRepository;
+  
 
   Future<void> _onSubscriptionRequested(
     TaskListSubscriptionRequested event,
@@ -107,7 +111,7 @@ class OperationForTaskBloc
           getTask, companyName, companyRefKeyID, getTask.id.toString());
       _taskRepository.addTask(getTask);
       state.taskList.add(getTask);
-      List<Task> returnTaskList = state.taskList;
+
 
       emit(OperationForTaskState(
           status: TaskStatus.success, taskList: List.of(state.taskList)));
@@ -125,7 +129,7 @@ class OperationForTaskBloc
       ...state.taskList.where((element) => element.id != 0)
     ];
     List<Task> forRemoveOperation = List.from(allTaskInPageWithoutID);
-    List<Task> forUpdateOperation = List.from(allTaskInPageWithID);
+  
 
     allTaskInPageWithID.removeWhere((task) => task.id == 0);
 

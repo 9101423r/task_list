@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/drop_down_bloc/drop_down_bloc.dart';
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:task_list/data/api/api_from_1c.dart';
 import 'package:task_list/screens/general_widgets/company_name_drop_down.dart';
 
@@ -18,8 +19,7 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
 
   TextEditingController taskDescriptionController = TextEditingController();
 
-  final Future<List<List<String>>> getFutureList =
-      ApiFromServer().getTypeTaskFromServer();
+  Future<List<List<String>>> future = ApiFromServer().getTypeTaskFromServer();
 
   void clearController() {
     taskTitleController.clear();
@@ -28,7 +28,7 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
 
   String refKey = '';
 
-  late String typeOfTask;
+  String typeOfTask = 'Please do voice';
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +56,10 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
                   onRefKeyGetIt: (String value) {
                     refKey = value;
                   },
-                  getFutureList: getFutureList,
+                  getFutureList: future,
                   onDropDownValueChoose: (String newValue) {
                     typeOfTask = newValue;
                   },
-                  typeGetFutureList: 'TypeTaskAndID',
                 )),
               )
             ]),

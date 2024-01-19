@@ -3,27 +3,26 @@ import 'dart:developer' as dev;
 import 'package:dio/dio.dart';
 import 'package:task_list/data/hive_local_storage/importan_fields_hive_ld.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
-import 'package:flutter_config/flutter_config.dart';
 
 class ApiFromServer {
-  String username = 'Пак В';
-  String password = '111';
   final dio = Dio();
 
+  final box = ImportantFieldsLocalStorage().box;
+  Map<String, dynamic> myJson =
+      ImportantFieldsLocalStorage().box.get(1)!.someImportantMaps[0];
+
   Future<List<List<String>>> getListCompany() async {
+    String name = myJson["ADMIN_NAME"];
+    String password = myJson["ADMIN_PASSWORD"];
+    print(myJson);
     // Возвращаю лист [Первое Лист из refKey, второе Лист из название]
     String basicAuth =
-        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+        'Basic ${base64.encode(utf8.encode('$name:$password'))}';
 
     dio.options.headers["authorization"] = basicAuth;
-    late final response;
-    print("await name Пак В:${FlutterConfig.get('ADMIN_NAME')}");
-    print('await post adress : ${FlutterConfig.get('API_URL_1C_WITH_POST_TASK')}');
-
-    print('await password 111 :${FlutterConfig.get('ADMIN_PASSWORD')}');
+    late final Response response;
     try {
-      response = await dio.get(
-          'http://192.168.1.15/Base/odata/standard.odata/Catalog_Контрагенты?\$format=application/json');
+      response = await dio.get(myJson["API_URL_1C_WITH_COMPANY_LIST"]!);
     } on DioException catch (e) {
       dev.log(e.toString());
     }
@@ -47,13 +46,15 @@ class ApiFromServer {
   }
 
   Future<List<List<String>>> getTypeTaskFromServer() async {
-    String basicAuth =
-        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+     String name = myJson["ADMIN_NAME"];
+    String password = myJson["ADMIN_PASSWORD"];
+    String basicAuth = 'Basic ${base64.encode(utf8.encode('$name:$password'))}';
+
     dio.options.headers["authorization"] = basicAuth;
-    late final response;
+    late final Response response;
     try {
-      response = await dio.get(
-          'http://192.168.1.15/BaseDev/odata/standard.odata/Catalog_Номенклатура?\$format=json&\$filter=ТипНоменклатуры%20eq%20%27Услуга%27'); // Два слеше перед доллар чекнуть
+      response = await dio.get(myJson[
+          "API_URL_1C_WITH_TYPE_LIST"]!); // Два слеше перед доллар чекнуть
     } on DioException catch (e) {
       dev.log(e.toString());
     } catch (e) {
@@ -69,9 +70,7 @@ class ApiFromServer {
         result.add(typeTask[i]['Description']);
         refKeyTask.add(typeTask[i]['Ref_Key']);
       }
-      ImportantFieldsLocalStorage().box.isEmpty // TODO
-          ? ImportantFieldsLocalStorage().saveMapValues(refKeyTask, result)
-          : {};
+      ImportantFieldsLocalStorage().saveMapValues(refKeyTask, result);
 
       return [refKeyTask, result];
     } else {
@@ -80,19 +79,19 @@ class ApiFromServer {
   }
 
   Future<Task> postTaskForServer(Task postTask, String companyID) async {
-    const postAdress =
-        'http://192.168.1.15/BaseDev/odata/standard.odata/Document_СозданиеЗаявки?\$format=json';
+    String name = myJson["ADMIN_NAME"];
+    String password = myJson["ADMIN_PASSWORD"];
+    
     String basicAuth =
-        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+        'Basic ${base64.encode(utf8.encode('$name:$password'))}'; // TODO прямое передача из json вызывает 401 от сервера
+    print("Admin name:${myJson["ADMIN_NAME"]}");
+    print("Admin_password:${myJson["ADMIN_PASSWORD"]}");
+    late final Response resultResponse;
     dio.options.headers["authorization"] = basicAuth;
 
-    late final Response resultResponse;
-    print("Is it printed PostTaskForServer1");
-    print(postTask);
-
     try {
-      resultResponse =
-          await dio.post(postAdress, data: postTask.toMap(companyID));
+      resultResponse = await dio.post(myJson["API_URL_1C_WITH_POST_TASK"]!,
+          data: postTask.toMap(companyID));
       print('ISit printed: $resultResponse');
       if (resultResponse.statusCode == 201) {
         Task task = Task.fromJson(resultResponse.data);
@@ -111,21 +110,17 @@ class ApiFromServer {
   }
 
   Future<List<Task>> getTasksFromServer(List<Task> listTask) async {
-    const url =
-        'http://192.168.1.15/BaseDev/odata/standard.odata/Document_СозданиеЗаявки?\$format=application/json&\$filter=';
-
-    // TODO
     List<String> idList = listTask
         .where((task) => task.temporaryUUID == 'null')
         .map((task) => task.id.toString())
         .toList();
 
-    var newUrl = url + idList.map((e) => "Number eq $e").join(' or ');
-
+    var newUrl = myJson["API_URL_1C_TASK_LIST"]! +
+        idList.map((e) => "Number eq $e").join(' or ');
     String basicAuth =
-        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
-    dio.options.headers["authorization"] = basicAuth;
+        'Basic ${base64.encode(utf8.encode('$myJson["ADMIN_NAME"]:$myJson["ADMIN_PASSWORD"]'))}';
 
+    dio.options.headers["authorization"] = basicAuth;
     late final Response resultResponse;
 
     try {
@@ -135,10 +130,6 @@ class ApiFromServer {
           var resultList = <Task>[];
           var result = resultResponse.data['value'];
           for (var i in result) {
-            // // print((i['Комментарии'][0]['Время']).toString());
-            // if(Task.fromJson(i).id == 7180 ){
-            // print((i['Комментарии'][0]['Время']).toString());}
-            // print("Task.fromJson: ${Task.fromJson(i)}");
             resultList.add(Task.fromJson(i));
             // TODO create local list<String> ref_key and typeTask и сопоставить значение
           }

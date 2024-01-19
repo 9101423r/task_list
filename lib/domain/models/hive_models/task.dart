@@ -63,8 +63,8 @@ class Task {
 
   Map toMap(String userRefKey) {
     DateTime now = DateTime.now();
-    List<Map<String, dynamic>> commentListMap =
-    comments.map((comment) => comment.toMap(userRefKey)).cast<Map<String, dynamic>>().toList();
+    List<Map<dynamic, dynamic>> commentListMap =
+    comments.map((comment) => comment.toMap(userRefKey)).toList();
     List<Map<dynamic, dynamic>> listOfStagesMap =
         listOfStages.map((stage) => stage.toMap()).toList();
     Map<String,dynamic> map = <String, dynamic>{};

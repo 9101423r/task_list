@@ -22,4 +22,10 @@ class LocaleProvider with ChangeNotifier {
     }
   }
 
+  Map<String, dynamic> _configMap = {};
+  Map<String, dynamic> get configMap => _configMap;
+
+  void setJsonForMap(Map<String, dynamic> json) {
+    _configMap = json;
+  }
 }

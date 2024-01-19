@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:task_list/domain/models/user_model.dart';
 import 'dart:developer' as dev;
 
@@ -19,7 +20,6 @@ class FirebaseUserAuth {
 
   Future<String> getCompanyRefKey() async {
     String email = FirebaseAuth.instance.currentUser!.email!;
-   
 
     try {
       DocumentSnapshot<Map<String, dynamic>> docSnapshot =
@@ -45,9 +45,9 @@ class FirebaseUserAuth {
       // companyRefKeyID = '968b4653-12fe-11ed-b540-1078d2580ce6'; // TODO
     }
   }
+
   Future<String> getUserName() async {
     String email = FirebaseAuth.instance.currentUser!.email!;
-   
 
     try {
       DocumentSnapshot<Map<String, dynamic>> docSnapshot =
@@ -76,7 +76,6 @@ class FirebaseUserAuth {
 
   Future<String> getCompanyName() async {
     String email = FirebaseAuth.instance.currentUser!.email!;
-   
 
     try {
       DocumentSnapshot<Map<String, dynamic>> docSnapshot =
@@ -101,6 +100,12 @@ class FirebaseUserAuth {
 
       // companyRefKeyID = '968b4653-12fe-11ed-b540-1078d2580ce6'; // TODO
     }
+  }
+
+  Future<void> initNotification() async {
+    await FirebaseMessaging.instance.requestPermission();
+    final fCMToken =await FirebaseMessaging.instance.getToken();
+    print('Token : $fCMToken');
   }
 
   Future<void> logOut() async {

@@ -17,7 +17,9 @@ class ImportantFieldsAdapter extends TypeAdapter<ImportantFields> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ImportantFields(
-      typeTaskAndRefKey: (fields[1] as Map).cast<String, String>(),
+      someImportantMaps: (fields[1] as List)
+          .map((dynamic e) => (e as Map).cast<String, String>())
+          .toList(),
     );
   }
 
@@ -26,7 +28,7 @@ class ImportantFieldsAdapter extends TypeAdapter<ImportantFields> {
     writer
       ..writeByte(1)
       ..writeByte(1)
-      ..write(obj.typeTaskAndRefKey);
+      ..write(obj.someImportantMaps);
   }
 
   @override
