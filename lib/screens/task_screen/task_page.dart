@@ -55,15 +55,18 @@ class _TaskPageState extends State<TaskPageStateFull> {
   }
 
   Column bodyMain(BuildContext context) {
+    print(
+        'ImImportantFieldsLocalStorage().box.get(1)!.someImportantMaps: ${ImportantFieldsLocalStorage().box.get(1)!.someImportantMaps}');
     var providerValue = BlocProvider.of<TaskDetailsBloc>(context);
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       JustText(stringType: 'Name', stringSpec: widget.task.title),
-
       JustText(
-          stringType: 'FirstElementCheckList',
-          stringSpec: widget.task.listOfStages.isEmpty
-              ? 'Empty'
-              : widget.task.listOfStages.first.descriptions.toString()),
+          stringType: 'TaskType',
+          stringSpec: ImportantFieldsLocalStorage()
+                  .box
+                  .get(1)!
+                  .someImportantMaps['typeTask']![widget.task.refKey] ??
+              'Empty'),
       JustText(stringType: 'NumberID', stringSpec: widget.task.id.toString()),
       JustText(
           stringType: 'Descriptions', stringSpec: widget.task.descriptions),

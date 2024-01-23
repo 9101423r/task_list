@@ -17,8 +17,9 @@ class _EndedTaskPageState extends State<EndedTaskPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
       builder: (context, state) {
-        List<Task> spesificListTask =
-            state.taskList.where((task) => task.status == 'Закрыта').toList();
+        List<Task> spesificListTask = state.taskList
+            .where((task) => task.status == 'Требует Уточнения')
+            .toList();
         if (spesificListTask.isEmpty) {
           if (state.status == TaskStatus.loading) {
             return const Center(

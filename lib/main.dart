@@ -1,9 +1,9 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/app/app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:task_list/constants/load_config.dart';
+import 'package:task_list/data/auth/firebase_notification.dart';
 import 'package:task_list/data/hive_local_storage/importan_fields_hive_ld.dart';
 
 import 'package:task_list/data/open_hive_box.dart';
@@ -19,33 +19,16 @@ void main() async {
   );
 
   Bloc.observer = MyGlobalObserver();
-  String path = await initHivePath();
-
+  await initHivePath();
   await registerAdapter();
-
-  await FirebaseMessaging.instance.requestPermission();
-  final fCMToken = await FirebaseMessaging.instance.getToken();
-  print('Token : $fCMToken');
-
   await openBox();
+
+  await FirebaseNotification().initNotification();
+
   Map<String, dynamic> json = await LoadConfig().loadJson();
-  print(json);
 
   ImportantFieldsLocalStorage()
-      .saveMapValues(json.keys.toList(), json.values.toList());
-
-  print('is it printed openBox');
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
+      .saveJson(json.keys.toList(), json.values.toList());
 
   runApp(const MyApp());
 }

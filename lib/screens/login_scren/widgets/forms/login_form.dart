@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'package:task_list/blocs/drop_down_bloc/drop_down_bloc.dart';
+
 import 'package:task_list/blocs/sign_up_bloc/sign_up_bloc.dart';
 
 import 'package:task_list/constants/app_text_styles.dart';
 import 'package:task_list/constants/validator.dart';
-
 import 'package:task_list/data/api/api_from_1c.dart';
-import 'package:task_list/domain/models/user_model.dart';
-
 import 'package:task_list/screens/general_widgets/company_name_drop_down.dart';
+
 import 'package:task_list/screens/login_scren/widgets/text_fields/email_text_field.dart';
 import 'package:task_list/screens/login_scren/widgets/text_fields/general_text_field.dart';
 import 'package:task_list/screens/login_scren/widgets/text_fields/password_text_field.dart';
@@ -34,8 +32,8 @@ class _LoginFormState extends State<LoginForm> {
   bool obscurePassword = true;
 
   String? _errorMsg;
-  // final Future<List<List<String>>> getFutureList =
-  //     ApiFromServer().getListCompany();
+  final Future<List<List<String>>> getFutureList =
+      ApiFromServer().getListCompany();
   String refKey = '';
 
   String companyName = 'NO company';
@@ -69,20 +67,19 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           Text('${AppLocalizations.of(context)!.loginCompanyName}:',
               style: AppTextStyles.companyName, maxLines: 2),
-          // BlocProvider(
-          //   create: (context) => DropDownBloc(),
-          //   child: Expanded(
-          //       child: DropDownWithRefKeyAndChangeValue(
-          //     onRefKeyGetIt: (String value) {
-          //       refKey = value;
-          //     },
-          //     getFutureList: getFutureList,
-          //     onDropDownValueChoose: (String newValue) {
-          //       companyName = newValue;
-          //     },
-          //     typeGetFutureList: 'CompanyNamesAndID',
-          //   )),
-          // )
+          BlocProvider(
+            create: (context) => DropDownBloc(),
+            child: Expanded(
+                child: DropDownWithRefKeyAndChangeValue(
+              onRefKeyGetIt: (String value) {
+                refKey = value;
+              },
+              getFutureList: getFutureList,
+              onDropDownValueChoose: (String newValue) {
+                companyName = newValue;
+              },
+            )),
+          )
         ],
       ),
     ));
@@ -94,19 +91,15 @@ class _LoginFormState extends State<LoginForm> {
         child: TextButton(
           onPressed: () {
             if (formKey.currentState!.validate()) {
-              MyUser myUser = MyUser.empty;
-              myUser = myUser.copyWith(
-                  userId: DateTime.now().toString(),
-                  email: emailController.text,
-                  companyName: companyName,
-                  fullName: fullNameController.text,
-                  phoneNumber:
+              context.read<SignUpBloc>().add(SignUpRequired(
+                  userID: DateTime.now().toString(),
+                  userName: fullNameController.text,
+                  userLogin: emailController.text,
+                  userCompanyName: companyName,
+                  refkey: refKey,
+                  userPhoneNumber:
                       Validator().clearPhoneNumber(phoneNumberController.text),
-                  refKey: refKey);
-
-              context
-                  .read<SignUpBloc>()
-                  .add(SignUpRequired(myUser, passwordController.text));
+                  password: passwordController.text));
             }
           },
           child: state is SignUpProcess

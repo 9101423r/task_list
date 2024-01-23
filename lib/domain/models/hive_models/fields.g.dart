@@ -17,9 +17,8 @@ class ImportantFieldsAdapter extends TypeAdapter<ImportantFields> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ImportantFields(
-      someImportantMaps: (fields[1] as List)
-          .map((dynamic e) => (e as Map).cast<String, String>())
-          .toList(),
+      someImportantMaps: (fields[1] as Map).map((dynamic k, dynamic v) =>
+          MapEntry(k as String, (v as Map).cast<String, String>())),
     );
   }
 

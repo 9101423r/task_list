@@ -20,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PageController pageController = PageController();
-  int index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-              leading: const Text('TaskList'),
+              title: const Text("Task List"),
               actions: const [PopUpMenuButton()]),
           body: LiquidPullToRefresh(
             onRefresh: () async {
               context
                   .read<OperationForTaskBloc>()
                   .add(PageRefreshed(listTask: state.taskList));
-              print('Refreshed : true');
             },
             child: PageView(
               pageSnapping: false,
@@ -66,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   position: badges.BadgePosition.topEnd(top: -14),
                   badgeContent: Text(
                     state.taskList
-                        .where((element) => element.status == 'Закрыта')
+                        .where(
+                            (element) => element.status == 'Требует Уточнения')
                         .toList()
                         .length
                         .toString(),

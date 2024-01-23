@@ -5,7 +5,7 @@ import 'package:task_list/domain/models/user_model.dart';
 import 'dart:developer' as dev;
 
 class FirebaseUserAuth {
-  final usersCollection = FirebaseFirestore.instance.collection('user');
+  final usersCollection = FirebaseFirestore.instance.collection('user');  
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<bool> createUser(MyUser myUser) async {
@@ -104,7 +104,7 @@ class FirebaseUserAuth {
 
   Future<void> initNotification() async {
     await FirebaseMessaging.instance.requestPermission();
-    final fCMToken =await FirebaseMessaging.instance.getToken();
+    final fCMToken = await FirebaseMessaging.instance.getToken();
     print('Token : $fCMToken');
   }
 

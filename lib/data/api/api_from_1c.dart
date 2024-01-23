@@ -8,21 +8,29 @@ class ApiFromServer {
   final dio = Dio();
 
   final box = ImportantFieldsLocalStorage().box;
-  Map<String, dynamic> myJson =
-      ImportantFieldsLocalStorage().box.get(1)!.someImportantMaps[0];
+  Map<String, String>? myJson =
+      ImportantFieldsLocalStorage().box.get(1)!.someImportantMaps['json'];
+
+  String getName() {
+    return myJson!["ADMIN_NAME"]!;
+  }
+
+  String getPassword() {
+    return myJson!["ADMIN_PASSWORD"]!;
+  }
 
   Future<List<List<String>>> getListCompany() async {
-    String name = myJson["ADMIN_NAME"];
-    String password = myJson["ADMIN_PASSWORD"];
     print(myJson);
+    String name = myJson!["ADMIN_NAME"]!;
+    String password = myJson!["ADMIN_PASSWORD"]!;
+
     // Возвращаю лист [Первое Лист из refKey, второе Лист из название]
-    String basicAuth =
-        'Basic ${base64.encode(utf8.encode('$name:$password'))}';
+    String basicAuth = 'Basic ${base64.encode(utf8.encode('$name:$password'))}';
 
     dio.options.headers["authorization"] = basicAuth;
     late final Response response;
     try {
-      response = await dio.get(myJson["API_URL_1C_WITH_COMPANY_LIST"]!);
+      response = await dio.get(myJson!["API_URL_1C_WITH_COMPANY_LIST"]!);
     } on DioException catch (e) {
       dev.log(e.toString());
     }
@@ -46,21 +54,22 @@ class ApiFromServer {
   }
 
   Future<List<List<String>>> getTypeTaskFromServer() async {
-     String name = myJson["ADMIN_NAME"];
-    String password = myJson["ADMIN_PASSWORD"];
+    String name = myJson!["ADMIN_NAME"]!;
+    String password = myJson!["ADMIN_PASSWORD"]!;
+
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$name:$password'))}';
 
     dio.options.headers["authorization"] = basicAuth;
     late final Response response;
     try {
-      response = await dio.get(myJson[
+      response = await dio.get(myJson![
           "API_URL_1C_WITH_TYPE_LIST"]!); // Два слеше перед доллар чекнуть
     } on DioException catch (e) {
       dev.log(e.toString());
     } catch (e) {
       dev.log(e.toString());
     }
-    if (response != null) {
+    if (response.data != null) {
       List<String> refKeyTask = [];
 
       List<String> result = [];
@@ -70,7 +79,9 @@ class ApiFromServer {
         result.add(typeTask[i]['Description']);
         refKeyTask.add(typeTask[i]['Ref_Key']);
       }
-      ImportantFieldsLocalStorage().saveMapValues(refKeyTask, result);
+      print('result: $result');
+      print('refKeyTask:$refKeyTask');
+      ImportantFieldsLocalStorage().saveTypeTask(refKeyTask, result);
 
       return [refKeyTask, result];
     } else {
@@ -79,18 +90,18 @@ class ApiFromServer {
   }
 
   Future<Task> postTaskForServer(Task postTask, String companyID) async {
-    String name = myJson["ADMIN_NAME"];
-    String password = myJson["ADMIN_PASSWORD"];
-    
+    String name = myJson!["ADMIN_NAME"]!;
+    String password = myJson!["ADMIN_PASSWORD"]!;
+
+    // Возвращаю лист [Первое Лист из refKey, второе Лист из название]
     String basicAuth =
         'Basic ${base64.encode(utf8.encode('$name:$password'))}'; // TODO прямое передача из json вызывает 401 от сервера
-    print("Admin name:${myJson["ADMIN_NAME"]}");
-    print("Admin_password:${myJson["ADMIN_PASSWORD"]}");
+
     late final Response resultResponse;
     dio.options.headers["authorization"] = basicAuth;
 
     try {
-      resultResponse = await dio.post(myJson["API_URL_1C_WITH_POST_TASK"]!,
+      resultResponse = await dio.post(myJson!["API_URL_1C_WITH_POST_TASK"]!,
           data: postTask.toMap(companyID));
       print('ISit printed: $resultResponse');
       if (resultResponse.statusCode == 201) {
@@ -115,10 +126,12 @@ class ApiFromServer {
         .map((task) => task.id.toString())
         .toList();
 
-    var newUrl = myJson["API_URL_1C_TASK_LIST"]! +
+    var newUrl = myJson!["API_URL_1C_TASK_LIST"]! +
         idList.map((e) => "Number eq $e").join(' or ');
-    String basicAuth =
-        'Basic ${base64.encode(utf8.encode('$myJson["ADMIN_NAME"]:$myJson["ADMIN_PASSWORD"]'))}';
+    String name = myJson!["ADMIN_NAME"]!;
+    String password = myJson!["ADMIN_PASSWORD"]!;
+
+    String basicAuth = 'Basic ${base64.encode(utf8.encode('$name:$password'))}';
 
     dio.options.headers["authorization"] = basicAuth;
     late final Response resultResponse;

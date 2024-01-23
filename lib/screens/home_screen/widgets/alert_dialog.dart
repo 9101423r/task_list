@@ -16,7 +16,6 @@ class MyAlertWidget extends StatefulWidget {
 
 class _MyAlertWidgetState extends State<MyAlertWidget> {
   TextEditingController taskTitleController = TextEditingController();
-
   TextEditingController taskDescriptionController = TextEditingController();
 
   Future<List<List<String>>> future = ApiFromServer().getTypeTaskFromServer();
@@ -27,7 +26,6 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
   }
 
   String refKey = '';
-
   String typeOfTask = 'Please do voice';
 
   @override
@@ -70,13 +68,17 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
                   String title = taskTitleController.text;
                   String taskDescription = taskDescriptionController.text;
 
-                  context.read<OperationForTaskBloc>().add(
-                      OperationForTaskPressedOK(
-                          title, taskDescription, refKey));
+                  if (title.isNotEmpty) {
+                    context.read<OperationForTaskBloc>().add(
+                        OperationForTaskPressedOK(
+                            title, taskDescription, refKey));
+                  }
                   print('Выбранный refKey :$refKey');
                   Navigator.pop(
                       context); // RefKey ключевое представление самого типа задачи
                   clearController();
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Тайтл задачи не может быть пустым')));
                 },
                 child: Text(AppLocalizations.of(context)!.addButton)),
             ElevatedButton(

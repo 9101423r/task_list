@@ -8,8 +8,21 @@ sealed class SignUpEvent extends Equatable {
 }
 
 class SignUpRequired extends SignUpEvent {
-  final MyUser user;
+  final String userID;
+  final String userName;
+  final String userLogin;
+  final String userCompanyName;
+  final String refkey;
+  final String userPhoneNumber;
+
   final String password;
 
-  const SignUpRequired(this.user, this.password);
+  const SignUpRequired(
+      {required this.userID,
+        required this.userName,
+      required this.userLogin,
+      required this.userCompanyName,
+      required this.refkey,
+      required this.userPhoneNumber,
+      required this.password});
 }

@@ -7,6 +7,7 @@ class MyUser extends Equatable {
   final String phoneNumber;
   final String fullName;
   final String refKey;
+  final String fcmToken;
 
   const MyUser(
       {required this.userId,
@@ -14,7 +15,8 @@ class MyUser extends Equatable {
       required this.companyName,
       required this.phoneNumber,
       required this.fullName,
-      required this.refKey});
+      required this.refKey,
+      required this.fcmToken});
 
   Map<String, Object> toDocument() {
     return {
@@ -23,7 +25,8 @@ class MyUser extends Equatable {
       'companyName': companyName,
       'phoneNumber': phoneNumber,
       'fullName': fullName,
-      "ref_key": refKey
+      "ref_key": refKey,
+      "fcmToken": fcmToken
     };
   }
 
@@ -33,7 +36,8 @@ class MyUser extends Equatable {
       companyName: '',
       phoneNumber: '',
       fullName: '',
-      refKey: '');
+      refKey: '',
+      fcmToken: '');
 
   static MyUser fromDocument(Map<String, dynamic> doc) {
     return MyUser(
@@ -42,7 +46,8 @@ class MyUser extends Equatable {
         companyName: doc['companyName'],
         phoneNumber: doc['phoneNumber'],
         fullName: doc['fullName'],
-        refKey: doc["refKey"]);
+        refKey: doc["refKey"],
+        fcmToken: doc["fcmToken"]);
   }
 
   MyUser copyWith(
@@ -51,17 +56,19 @@ class MyUser extends Equatable {
       String? companyName,
       String? phoneNumber,
       String? fullName,
-      String? refKey}) {
+      String? refKey,
+      String? fcmToken}) {
     return MyUser(
         userId: userId ?? this.userId,
         email: email ?? this.email,
         companyName: companyName ?? this.companyName,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         fullName: fullName ?? this.fullName,
-        refKey: refKey ?? this.refKey);
+        refKey: refKey ?? this.refKey,
+        fcmToken: fcmToken ?? this.fcmToken);
   }
 
   @override
   List<Object?> get props =>
-      [userId, email, companyName, phoneNumber, fullName, refKey];
+      [userId, email, companyName, phoneNumber, fullName, refKey, fcmToken];
 }

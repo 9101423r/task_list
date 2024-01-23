@@ -26,11 +26,15 @@ class _MyAlertDialogForAddingCommentState
           actions: [
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    String commentText = textEditingController.text;
+                  String commentText = textEditingController.text;
+                  if (commentText.isNotEmpty) {
                     context.read<TaskDetailsBloc>().add(TappedAddComment(
                         task: widget.task, commentText: commentText));
-                  });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Комментарий не может быть пустым')));
+                  }
+
                   Navigator.pop(context);
                   textEditingController.clear();
                 },
