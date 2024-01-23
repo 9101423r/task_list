@@ -34,5 +34,5 @@ A new Flutter project.
 5. Список фич с отметками что сделано а что ещё нет.
     1. Связано с сервером 1с локально 
 6. Прочее (Здесь могу быть всякие комментарии, например о том что есть какой либо нюанс функционала и т.п.)
-
-https://docs.google.com/document/d/1uIfUGckhnFTMeG6fCBpKfOhVaadlkmNDhq5q7sv9YIo/edit
+    1. https://docs.google.com/document/d/1uIfUGckhnFTMeG6fCBpKfOhVaadlkmNDhq5q7sv9YIo/edit краткая презентация
+    2. Надо перенести ситему уведомление firebase FCM со старого на новую версию до 24 июня 
