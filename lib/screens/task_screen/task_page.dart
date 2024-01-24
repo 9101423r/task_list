@@ -39,6 +39,13 @@ class TaskPageStateFull extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPageStateFull> {
   @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -55,17 +62,13 @@ class _TaskPageState extends State<TaskPageStateFull> {
   }
 
   Column bodyMain(BuildContext context) {
-    print(
-        'ImImportantFieldsLocalStorage().box.get(1)!.someImportantMaps: ${ImportantFieldsLocalStorage().box.get(1)!.someImportantMaps}');
     var providerValue = BlocProvider.of<TaskDetailsBloc>(context);
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       JustText(stringType: 'Name', stringSpec: widget.task.title),
       JustText(
           stringType: 'TaskType',
           stringSpec: ImportantFieldsLocalStorage()
-                  .box
-                  .get(1)!
-                  .someImportantMaps['typeTask']![widget.task.refKey] ??
+                  .returnTypeTaskJson()?[widget.task.refKey] ??
               'Empty'),
       JustText(stringType: 'NumberID', stringSpec: widget.task.id.toString()),
       JustText(

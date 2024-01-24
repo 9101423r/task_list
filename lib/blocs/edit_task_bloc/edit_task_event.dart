@@ -15,3 +15,8 @@ class TappedAddComment extends TaskDetailsEvent {
 }
 
 class OnSubscriptionRequested extends TaskDetailsEvent{}
+
+class TaskUpdated extends TaskDetailsEvent{
+  final Task task;
+  const TaskUpdated({required this.task});
+}

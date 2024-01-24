@@ -6,16 +6,12 @@ import 'package:task_list/screens/home_screen/widgets/elements/task_card.dart';
 
 import '../../../../domain/models/hive_models/task.dart';
 
-class HomeBody extends StatefulWidget {
+class HomeBody extends StatelessWidget {
   const HomeBody({super.key});
 
   @override
-  State<HomeBody> createState() => _HomeBodyState();
-}
-
-class _HomeBodyState extends State<HomeBody> {
-  @override
   Widget build(BuildContext context) {
+    var providerValue = BlocProvider.of<OperationForTaskBloc>(context);
     return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
       builder: (context, state) {
         List<Task> spesificListTask =

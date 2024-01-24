@@ -5,6 +5,8 @@ import 'package:task_list/data/auth/firebase_auth.dart';
 import 'package:task_list/data/auth/firebase_notification.dart';
 import 'package:task_list/domain/models/user_model.dart';
 
+import '../../data/hive_local_storage/importan_fields_hive_ld.dart';
+
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
@@ -30,6 +32,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         MyUser user = await Authentication().signUp(
             createUser, event.password); // this user return firebase user uid
         await FirebaseUserAuth().createUser(user);
+        await ImportantFieldsLocalStorage().saveUserInfo(user.toDocument());
         emit(const SignUpSuccess());
       } catch (e) {
         emit(const SignUpFailure());

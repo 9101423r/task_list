@@ -68,17 +68,21 @@ class _MyAlertWidgetState extends State<MyAlertWidget> {
                   String title = taskTitleController.text;
                   String taskDescription = taskDescriptionController.text;
 
+                  print('Show refkey: $refKey');
                   if (title.isNotEmpty) {
                     context.read<OperationForTaskBloc>().add(
                         OperationForTaskPressedOK(
                             title, taskDescription, refKey));
                   }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Тайтл задачи не может быть пустым')));
+                  }
                   print('Выбранный refKey :$refKey');
                   Navigator.pop(
                       context); // RefKey ключевое представление самого типа задачи
                   clearController();
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Тайтл задачи не может быть пустым')));
+
                 },
                 child: Text(AppLocalizations.of(context)!.addButton)),
             ElevatedButton(

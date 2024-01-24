@@ -32,13 +32,24 @@ class ImportantFieldsLocalStorage {
     box.get(1)!.someImportantMaps['typeTask'] = mapWithTypeTaskAndTheirRefKey;
   }
 
-  void saveUserInfo(List<String> userInfoKey, List<dynamic> userInfoValue) {
-    List<String> stringList = List.castFrom(userInfoValue);
+  Future<void> saveUserInfo(Map<String,Object> userMap) async{
+    List<String> keys = List.castFrom(userMap.keys.toList());
+    List<String> values = List.castFrom(userMap.values.toList());
+    print(keys);
+    print(values);
     createList();
 
     Map<String, String> mapWithUserInfoAndValue =
-        Map.fromIterables(userInfoKey, stringList);
+        Map.fromIterables(keys, values);
 
-    box.get(1)!.someImportantMaps['userInfo'] = mapWithUserInfoAndValue;
+    box.get(1)!.someImportantMaps['userJson'] = mapWithUserInfoAndValue;
+  }
+
+  Map<String, String>? returnUserJson(){
+    return box.get(1)!.someImportantMaps['userJson'];
+  }
+
+  Map<String,String>? returnTypeTaskJson(){
+    return box.get(1)!.someImportantMaps['typeTask'];
   }
 }

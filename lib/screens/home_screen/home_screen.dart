@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
+import 'package:task_list/domain/models/hive_models/task.dart';
 
 import 'package:task_list/screens/home_screen/widgets/alert_dialog.dart';
 import 'package:task_list/screens/home_screen/widgets/home_body/ended_tasks_body.dart';
@@ -18,7 +19,40 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print('its  WidgetsBinding.instance.addPostFrameCallback ');
+      print('its$listTasks');
+      context
+          .read<OperationForTaskBloc>()
+          .add(PageRefreshed(listTask: listTasks));
+    });
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      print('Приложение активировано');
+
+      context
+          .read<OperationForTaskBloc>()
+          .add(PageRefreshed(listTask: listTasks));
+    }
+  }
+
+  late List<Task> listTasks = [];
+
   PageController pageController = PageController();
 
   @override
@@ -26,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var providerValue = BlocProvider.of<OperationForTaskBloc>(context);
     return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
       builder: (context, state) {
+        listTasks = state.taskList;
         return Scaffold(
           appBar: AppBar(
               title: const Text("Task List"),

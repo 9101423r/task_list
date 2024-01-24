@@ -8,7 +8,10 @@ import 'package:task_list/constants/app_theme.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
 import 'package:task_list/domain/provider/locale_provider.dart';
 import 'package:task_list/l10n/all_locales.dart';
+import 'package:task_list/main.dart';
 import 'package:task_list/screens/task_screen/task_page.dart';
+
+import '../data/auth/firebase_notification.dart';
 
 class MyAppView extends StatefulWidget {
   const MyAppView({super.key});
@@ -21,6 +24,8 @@ class _MyAppViewState extends State<MyAppView> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseNotification firebaseNotification = FirebaseNotification();
+    firebaseNotification.initPushNotification();
     final localeProvider = Provider.of<LocaleProvider>(context);
     return MaterialApp(
         title: 'TaskList',
@@ -34,6 +39,7 @@ class _MyAppViewState extends State<MyAppView> {
         locale: localeProvider.locale,
         supportedLocales: AllLocale.all,
         theme: AppTheme.mainTheme,
+        navigatorKey: navigatorKey,
         onGenerateRoute: (routes) {
           if (routes.name == '/task_screen') {
             final Task task = routes.arguments as Task;

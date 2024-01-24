@@ -1,8 +1,9 @@
 import 'package:hive/hive.dart';
-import 'package:task_list/constants/validator.dart';
 import 'package:task_list/domain/models/hive_models/comments_model.dart';
 
+import '../../../constants/validator.dart';
 import 'list_of_stages.dart';
+
 
 part 'task.g.dart';
 
@@ -26,6 +27,7 @@ class Task {
   String refKey;
   @HiveField(9)
   List<ListOfStages> listOfStages;
+
 
   Task(
       {required this.id,
@@ -61,7 +63,7 @@ class Task {
         listOfStages: listOfStagesFromJson);
   }
 
-  Map toMap(String userRefKey) {
+  Map toMap(String userRefKey,String userPhoneID) {
     DateTime now = DateTime.now();
     List<Map<dynamic, dynamic>> commentListMap =
     comments.map((comment) => comment.toMap(userRefKey)).toList();
@@ -94,6 +96,7 @@ class Task {
     map["СверухрочныеРаботы"] = false;
     map["ЦенаШтучныхРабот"] = 0;
     map["ДоговорКлиента_Key"] = "00000000-0000-0000-0000-000000000000";
+    map["ИдентификаторМобильногоПриложения"] = userPhoneID;
     map["Комментарии"] = commentListMap;
     map["ИспользуемыеМатериалы"] = [];
     map["ЧекЛист"] = listOfStagesMap;
