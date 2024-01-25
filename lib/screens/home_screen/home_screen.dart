@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,18 +27,30 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     // TODO: implement initState
     super.initState();
+    FirebaseMessaging.onMessage.listen((event) {
+      print('FirebaseMessaging.onMessageOpenedApp.listen');
+      context
+          .read<OperationForTaskBloc>()
+          .add(PageRefreshed(listTask: listTasks));
+      log(context.read<OperationForTaskBloc>().state.taskList.toString(),
+          name: 'FirebaseMessaging.onMessage state taskList');
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print('its  WidgetsBinding.instance.addPostFrameCallback ');
       print('its$listTasks');
       context
           .read<OperationForTaskBloc>()
           .add(PageRefreshed(listTask: listTasks));
+      log(context.read<OperationForTaskBloc>().state.taskList.toString(),
+          name: 'InitState addPostFrameCallback');
     });
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    print('Приложение деактивировано');
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -44,10 +59,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       print('Приложение активировано');
-
       context
           .read<OperationForTaskBloc>()
           .add(PageRefreshed(listTask: listTasks));
+      log(context.read<OperationForTaskBloc>().state.taskList.toString(),
+          name: 'didChangeAppLifecycleState');
     }
   }
 
@@ -67,24 +83,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               actions: const [PopUpMenuButton()]),
           body: LiquidPullToRefresh(
             onRefresh: () async {
-              context
-                  .read<OperationForTaskBloc>()
-                  .add(PageRefreshed(listTask: state.taskList));
+              providerValue.add(PageRefreshed(listTask: state.taskList));
             },
             child: PageView(
               pageSnapping: false,
               physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               onPageChanged: (pageView) {
-                context.read<OperationForTaskBloc>().add(PageViewChange(
+                providerValue.add(PageViewChange(
                     pageInt: pageView, pageController: pageController));
               },
-              children: const [HomeBody(), EndedTaskPage()],
+              children: [
+                BlocProvider.value(
+                    value: providerValue, child: const HomeBody()),
+                BlocProvider.value(
+                    value: providerValue, child: const EndedTaskPage())
+              ],
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
             onTap: (pageView) {
-              context.read<OperationForTaskBloc>().add(PageViewChange(
+              providerValue.add(PageViewChange(
                   pageInt: pageView, pageController: pageController));
             },
             items: [

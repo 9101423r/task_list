@@ -19,8 +19,7 @@ class AppHome extends StatefulWidget {
 
 class _AppHomeState extends State<AppHome> {
   TaskRepository taskRepository = TaskRepository();
-  PageController pageController = PageController();
-
+ 
 
  
 

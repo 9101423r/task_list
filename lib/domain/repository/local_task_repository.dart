@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:task_list/data/hive_local_storage/lis_of_stages_local_storage.dart';
 import 'package:task_list/data/hive_local_storage/task_hive_local_storage.dart';
@@ -20,6 +21,8 @@ class TaskRepository {
   }
 
   List<Task> getListTask() {
+    log(_taskBox.values.toList().toString());
+    log('Сверху значение из бокса');
     return _taskBox.values.toList();
   }
 

@@ -32,6 +32,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         MyUser user = await Authentication().signUp(
             createUser, event.password); // this user return firebase user uid
         await FirebaseUserAuth().createUser(user);
+        print(user.toDocument());
+        print('*' * 50);
+        print('______' * 7);
         await ImportantFieldsLocalStorage().saveUserInfo(user.toDocument());
         emit(const SignUpSuccess());
       } catch (e) {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -8,6 +10,7 @@ import 'package:task_list/data/api/api_from_1c.dart';
 import 'package:task_list/domain/repository/local_task_repository.dart';
 import 'package:task_list/data/auth/firebase_auth.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
+import 'package:task_list/main.dart';
 
 part 'operation_for_task_event.dart';
 part 'operation_for_task_state.dart';
@@ -15,7 +18,6 @@ part 'operation_for_task_state.dart';
 class OperationForTaskBloc
     extends Bloc<OperationForTaskEvent, OperationForTaskState> {
   final TaskRepository _taskRepository;
-
 
   OperationForTaskBloc({required TaskRepository taskRepository})
       : _taskRepository = taskRepository,
@@ -28,7 +30,10 @@ class OperationForTaskBloc
 
     on<TaskTapped>((event, emit) => taskTapped(event, emit));
 
-    on<ClearBoxTapped>((event, emit) => TaskRepository().clearBox());
+    on<ClearBoxTapped>((event, emit) {
+      state.taskList.clear();
+      taskRepository.clearBox();
+    });
 
     on<PageViewChange>((event, emit) {
       event.pageController.jumpToPage(event.pageInt);
@@ -46,9 +51,12 @@ class OperationForTaskBloc
     TaskListSubscriptionRequested event,
     Emitter<OperationForTaskState> emit,
   ) async {
-    emit(state.copyWith(
-        status: () => TaskStatus.loading)); // TODO ADD here taskList if I ruin
+   emit(OperationForTaskState(status: TaskStatus.loading,taskList: state.taskList));    // TODO ADD here taskList if I ruin delete if ruin
 
+    print(
+        "OperationForTaskBloc _taskRepository.getListTask().toString(): ${_taskRepository.getListTask()}");
+    log(_taskRepository.getListTask().toString(),
+        name: 'OperationForTaskBloc _taskRepository.getListTask().toString()');
     if (_taskRepository.getListTask().isEmpty) {
       emit(const OperationForTaskState(
           status: TaskStatus.success, taskList: []));
@@ -102,7 +110,6 @@ class OperationForTaskBloc
       PageRefreshed event, Emitter<OperationForTaskState> emit) async {
     emit(OperationForTaskState(
         status: TaskStatus.loading, taskList: state.taskList));
- 
 
     List<Task> allTaskInPageWithoutID =
         state.taskList.where((element) => element.id == 0).toList();
@@ -112,8 +119,6 @@ class OperationForTaskBloc
     List<Task> forRemoveOperation = List.from(allTaskInPageWithoutID);
 
     allTaskInPageWithID.removeWhere((task) => task.id == 0);
-
-    String companyRefKeyID = await FirebaseUserAuth().getCompanyRefKey();
 
     for (var task in forRemoveOperation) {
       Task getTask = await ApiFromServer().postTaskForServer(task);
@@ -126,10 +131,6 @@ class OperationForTaskBloc
         allTaskInPageWithID.add(getTask);
       }
     }
-    // for(var task in forUpdateOperation){
-    //   Task getTask = await ApiFromServer
-    //
-    // }
 
     List<Task> updatedTaskList = [];
     updatedTaskList.addAll(allTaskInPageWithID);
@@ -141,14 +142,14 @@ class OperationForTaskBloc
     }
 
     List<Task> resultTasksForState = [];
-    resultTasksForState.addAll(getResultsFromServer);
-    resultTasksForState.addAll(allTaskInPageWithoutID);
+    resultTasksForState = _taskRepository.getListTask();
     emit(OperationForTaskState(
         status: TaskStatus.success, taskList: resultTasksForState));
   }
 
   void taskTapped(TaskTapped event, Emitter<OperationForTaskState> emit) {
-    Navigator.pushNamed(event.context, '/task_screen', arguments: event.task);
+    print("Crretn state name:${navigatorKey.currentState.toString()}");
+    navigatorKey.currentState?.pushNamed('/task_screen', arguments: event.task);
   }
 
   Future<void> saveTask() async {}

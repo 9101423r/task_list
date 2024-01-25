@@ -11,8 +11,8 @@ class ApiFromServer {
   Map<String, String>? myJson =
       ImportantFieldsLocalStorage().box.get(1)!.someImportantMaps['json'];
 
-  Map<String,String>? userJson =  ImportantFieldsLocalStorage().returnUserJson();
-
+  Map<String, String>? userJson =
+      ImportantFieldsLocalStorage().returnUserJson();
 
   String getName() {
     return myJson!["ADMIN_NAME"]!;
@@ -93,7 +93,9 @@ class ApiFromServer {
   }
 
   Future<Task> postTaskForServer(Task postTask) async {
-    print(userJson);
+    if (userJson == null) {
+      print('ERROR +' * 20);
+    }
     String name = myJson!["ADMIN_NAME"]!;
     String password = myJson!["ADMIN_PASSWORD"]!;
 
@@ -104,14 +106,12 @@ class ApiFromServer {
     late final Response resultResponse;
     dio.options.headers["authorization"] = basicAuth;
 
-    String userPhoneID = userJson!["fcmToken"]!;
-    String companyID = userJson!["ref_key"]!;
-    print('Is it empty: $userPhoneID');
-    print('Is it empty : $companyID');
+    String companyID = userJson!['ref_key']!;
+    String userPhoneID = userJson!['fcmToken']!;
 
     try {
       resultResponse = await dio.post(myJson!["API_URL_1C_WITH_POST_TASK"]!,
-          data: postTask.toMap(companyID,userPhoneID));
+          data: postTask.toMap(companyID!, userPhoneID));
       print('ISit printed: $resultResponse');
       if (resultResponse.statusCode == 201) {
         Task task = Task.fromJson(resultResponse.data);
@@ -130,6 +130,9 @@ class ApiFromServer {
   }
 
   Future<List<Task>> getTasksFromServer(List<Task> listTask) async {
+    if (listTask.isEmpty) {
+      return []; // TODO check here потому что после стройки идет pageRehfreshed из initState и возможно пустой лист вызывает ошибку
+    }
     List<String> idList = listTask
         .where((task) => task.temporaryUUID == 'null')
         .map((task) => task.id.toString())

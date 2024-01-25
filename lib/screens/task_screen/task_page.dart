@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/edit_task_bloc/edit_task_bloc.dart';
 import 'package:task_list/domain/models/hive_models/task.dart';
+import 'package:task_list/main.dart';
 
 import 'package:task_list/screens/task_screen/widgets/elements/alert_dialog.dart';
 import 'package:task_list/screens/task_screen/widgets/comments/comments_show.dart';
@@ -49,7 +51,13 @@ class _TaskPageState extends State<TaskPageStateFull> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: const BackButton(),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              print('We are must to back HomePage from TaskPage');
+              Navigator.pop(context, widget.task);
+            },
+          ),
           actions: [
             TaskPopUpMenuButton(
               task: widget.task,

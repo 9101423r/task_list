@@ -12,12 +12,12 @@ final class OperationForTaskState extends Equatable {
   final List<Task> taskList;
 
   OperationForTaskState copyWith({
-    TaskStatus Function()? status,
-    List<Task> Function()? taskList,
+    TaskStatus? status,
+    List<Task>?  taskList,
   }) {
     return OperationForTaskState(
-      status: status != null ? status() : this.status,
-      taskList: taskList != null ? taskList() : this.taskList,
+      status: status ?? this.status,
+      taskList: taskList ?? this.taskList,
     );
   }
 

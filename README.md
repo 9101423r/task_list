@@ -37,3 +37,4 @@ A new Flutter project.
     1. https://docs.google.com/document/d/1uIfUGckhnFTMeG6fCBpKfOhVaadlkmNDhq5q7sv9YIo/edit краткая презентация
     2. Надо перенести ситему уведомление firebase FCM со старого на новую версию до 24 июня 
    3. Проверить насколько времени будет актуально phoneId fCMToken у устройства и обнавить в зависимости от ответа сперва в Firebase, потом в боксе 
+   4. Проблема с тем что при открытие страница при пуше, требует несколько нажатий 

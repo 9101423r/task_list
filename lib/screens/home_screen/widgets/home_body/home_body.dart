@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/blocs/operation_for_task/operation_for_task_bloc.dart';
@@ -11,11 +13,13 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var providerValue = BlocProvider.of<OperationForTaskBloc>(context);
     return BlocBuilder<OperationForTaskBloc, OperationForTaskState>(
       builder: (context, state) {
+        log('HomeBody state taskList: ${state.taskList}');
         List<Task> spesificListTask =
             state.taskList.where((task) => task.status != 'Закрыта').toList();
+        log("HomeBody spesificListTask list TaskS != 'Закрыта': $spesificListTask");
+
         if (spesificListTask.isEmpty) {
           if (state.status == TaskStatus.loading) {
             return const Center(

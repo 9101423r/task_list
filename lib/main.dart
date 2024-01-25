@@ -10,7 +10,8 @@ import 'package:task_list/data/open_hive_box.dart';
 import 'package:task_list/simple_bloc_observer.dart';
 
 import 'firebase_options.dart';
-final  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -19,9 +20,12 @@ void main() async {
   );
 
   Bloc.observer = MyGlobalObserver();
-  await initHivePath();
+  String path = await initHivePath();
+  print(path);
   await registerAdapter();
   await openBox();
+
+  await ImportantFieldsLocalStorage().createList();
 
   await FirebaseNotification().initNotification();
 
